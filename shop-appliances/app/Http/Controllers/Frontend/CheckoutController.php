@@ -43,7 +43,7 @@ class CheckoutController extends Controller
             // Create order
             $order = Order::create([
                 'user_id' => auth()->id(),
-                'total' => $cartItems->sum(function($item) {
+                'total_amount' => $cartItems->sum(function($item) {
                     return ($item->product->discount_price ?? $item->product->price) * $item->quantity;
                 }),
                 'status' => 'pending',
@@ -68,10 +68,11 @@ class CheckoutController extends Controller
             DB::commit();
 
             return redirect()->route('orders.show', $order)
-                ->with('success', 'Order placed successfully.');
+                ->with('success', "Order #{$order->order_number} placed successfully.");
 
         } catch (\Exception $e) {
             DB::rollBack();
+            \Log::error('Order creation failed: ' . $e->getMessage());
             return back()->with('error', 'Something went wrong. Please try again.');
         }
     }

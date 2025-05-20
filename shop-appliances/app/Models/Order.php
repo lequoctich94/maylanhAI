@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Carbon\Carbon;
 
 class Order extends Model
 {
@@ -11,7 +12,8 @@ class Order extends Model
 
     protected $fillable = [
         'user_id',
-        'total',
+        'order_number',
+        'total_amount',
         'status',
         'shipping_address',
         'shipping_phone',
@@ -19,8 +21,30 @@ class Order extends Model
     ];
 
     protected $casts = [
-        'total' => 'decimal:2'
+        'total_amount' => 'decimal:2'
     ];
+
+    protected static function boot()
+    {
+        parent::boot();
+
+        // Tự động tạo order_number trước khi lưu
+        static::creating(function ($order) {
+            $order->order_number = static::generateOrderNumber();
+        });
+    }
+
+    // Tạo mã đơn hàng theo định dạng: ORD-YYYYMMDD-XXX
+    public static function generateOrderNumber()
+    {
+        $date = Carbon::now()->format('Ymd');
+        $lastOrder = static::whereDate('created_at', Carbon::today())
+            ->latest()
+            ->first();
+
+        $sequence = $lastOrder ? (intval(substr($lastOrder->order_number, -3)) + 1) : 1;
+        return sprintf("ORD-%s-%03d", $date, $sequence);
+    }
 
     // Relationships
     public function user()
