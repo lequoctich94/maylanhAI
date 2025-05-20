@@ -1,0 +1,73 @@
+1. Tôi muốn viết một trang web bán các sản phẩm gia dụng: máy lạnh, máy giặt
+2. Công Nghệ sử dụng: HTML, CSS, Bootstrap, JavaScript, Laravel, MySQL
+3. Tạo database với các bảng sau: sử dụng migration
+    - bảng loại sản phẩm
+    - bảng sản phẩm
+    - bảng tin tức
+    - bảng bài viết
+    - bảng liên hệ
+    - bảng giỏ hàng
+4. Trang web có các trang:
+- dành cho khách hàng
+    - trang chủ
+    - trang sản phẩm
+    - trang giỏ hàng
+    - trang thanh toán
+    - trang liên hệ
+    - trang giới thiệu
+    - trang tin tức
+- dành cho admin
+    - trang quản lý sản phẩm
+        - thêm sản phẩm
+        - sửa sản phẩm
+        - xóa sản phẩm
+    - trang quản lý đơn hàng
+    - trang quản lý khách hàng
+    - trang quản lý tin tức
+    - trang quản lý bài viết
+    - trang quản lý liên hệ
+
+5. Trang chủ có các nội dung:
+    - Logo
+    - Menu
+        - trang chủ
+        - loại sản phẩm
+        - trang giỏ hàng
+        - trang thanh toán
+        - trang liên hệ
+        - trang giới thiệu
+        - trang tin tức
+    - Slider
+    - danh sách sản phẩm: là danh sách các sản phẩm được hiển thị trên trang chủ
+        - tên sản phẩm
+        - hình ảnh sản phẩm
+        - giá sản phẩm
+        - giá giảm
+        - mô tả sản phẩm
+        - nút "Xem chi tiết"
+        - nút "Thêm vào giỏ hàng"
+        - nút "Mua hàng"
+    - ở menu khi chọn loại sản phẩn thì hiển thị danh sách sản phẩm của loại sản phẩm đó
+
+    - Giới thiệu
+    - Liên hệ
+    - Footer
+
+6. khi user nhấn vào sản phẩn sẽ tới trang chi tiết sản phẩn 
+7. Trang chi tiết sản phẩm có các nội dung:
+    - Logo
+    - Menu
+    - Hình ảnh sản phẩm
+    - tên sản phẩm
+    - giá sản phẩm
+    - giá giảm
+    - mô tả sản phẩm
+    - nút "Thêm vào giỏ hàng"
+    - nút "Mua hàng"
+    - Giới thiệu
+    - Liên hệ
+    - Footer
+
+
+
+

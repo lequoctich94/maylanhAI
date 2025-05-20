@@ -1,0 +1,13 @@
+tạo cho mình 1 database với các bảng sau:
+- bảng loại sản phẩm
+- bảng sản phẩm
+- bảng đơn hàng
+- bảng chi tiết đơn hàng
+- bảng tin tức
+- bảng bài viết
+- bảng liên hệ
+- bảng giỏ hàng
+- bảng khách hàng
+- bảng nhân viên
+- bảng quyền
+
