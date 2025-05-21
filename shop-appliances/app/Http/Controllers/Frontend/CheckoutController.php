@@ -7,12 +7,14 @@ use App\Models\Order;
 use App\Models\OrderItem;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Auth;
 
 class CheckoutController extends Controller
 {
     public function index()
     {
-        $cartItems = auth()->user()->carts()->with('product')->get();
+        $cartItems = Auth::user()->carts()->with('product')->get();
 
         if ($cartItems->isEmpty()) {
             return redirect()->route('cart.index')
@@ -30,7 +32,7 @@ class CheckoutController extends Controller
             'payment_method' => 'required|in:cod,bank_transfer'
         ]);
 
-        $cartItems = auth()->user()->carts()->with('product')->get();
+        $cartItems = Auth::user()->carts()->with('product')->get();
 
         if ($cartItems->isEmpty()) {
             return redirect()->route('cart.index')
@@ -67,13 +69,21 @@ class CheckoutController extends Controller
 
             DB::commit();
 
-            return redirect()->route('orders.show', $order)
-                ->with('success', "Order #{$order->order_number} placed successfully.");
+            return redirect()->route('checkout.success', $order);
 
         } catch (\Exception $e) {
             DB::rollBack();
-            \Log::error('Order creation failed: ' . $e->getMessage());
+            Log::error('Order creation failed: ' . $e->getMessage());
             return back()->with('error', 'Something went wrong. Please try again.');
         }
+    }
+
+    public function success(Order $order)
+    {
+        if ($order->user_id !== Auth::id()) {
+            abort(403);
+        }
+
+        return view('frontend.checkout.success', compact('order'));
     }
 } 

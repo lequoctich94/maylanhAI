@@ -34,6 +34,7 @@ Route::middleware('auth')->group(function () {
     // Checkout Routes
     Route::get('/checkout', [CheckoutController::class, 'index'])->name('checkout.index');
     Route::post('/checkout', [CheckoutController::class, 'store'])->name('checkout.store');
+    Route::get('/checkout/{order}/success', [CheckoutController::class, 'success'])->name('checkout.success');
 
     // Profile Routes
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');

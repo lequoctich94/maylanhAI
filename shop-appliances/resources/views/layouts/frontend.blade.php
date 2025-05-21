@@ -24,17 +24,18 @@
                 </button>
                 
                 <div class="collapse navbar-collapse" id="navbarNav">
-                    <ul class="navbar-nav">
+                    <ul class="navbar-nav me-auto">
                         <li class="nav-item">
                             <a class="nav-link" href="{{ route('home') }}">Home</a>
                         </li>
-                        @if(isset($categories))
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ route('products.index') }}">Products</a>
+                        </li>
                         <li class="nav-item dropdown">
-                            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" 
-                                data-bs-toggle="dropdown" aria-expanded="false">
+                            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown">
                                 Categories
                             </a>
-                            <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                            <ul class="dropdown-menu">
                                 @foreach($categories as $category)
                                     <li>
                                         <a class="dropdown-item" href="{{ route('products.category', $category->slug) }}">
@@ -44,42 +45,56 @@
                                 @endforeach
                             </ul>
                         </li>
-                        @endif
-                        <li class="nav-item">
-                            <a class="nav-link" href="{{ route('products.index') }}">Products</a>
-                        </li>
                     </ul>
                     
-                    <ul class="navbar-nav ms-auto">
-                        @guest
+                    <ul class="navbar-nav">
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ route('cart.index') }}">
+                                <i class="fas fa-shopping-cart"></i> Giỏ hàng
+                                @auth
+                                    @if(auth()->user()->carts()->count() > 0)
+                                        <span class="badge bg-danger">{{ auth()->user()->carts()->count() }}</span>
+                                    @endif
+                                @endauth
+                            </a>
+                        </li>
+                        @auth
+                            <li class="nav-item dropdown">
+                                <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-bs-toggle="dropdown">
+                                    <i class="fas fa-user"></i> {{ auth()->user()->name }}
+                                </a>
+                                <ul class="dropdown-menu dropdown-menu-end">
+                                    @if(auth()->user()->is_admin)
+                                        <li>
+                                            <a class="dropdown-item" href="{{ route('admin.dashboard') }}">
+                                                <i class="fas fa-tachometer-alt"></i> Quản trị
+                                            </a>
+                                        </li>
+                                        <li><hr class="dropdown-divider"></li>
+                                    @endif
+                                    <li>
+                                        <a class="dropdown-item" href="{{ route('profile.edit') }}">
+                                            <i class="fas fa-user-edit"></i> Thông tin cá nhân
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <form action="{{ route('logout') }}" method="POST">
+                                            @csrf
+                                            <button type="submit" class="dropdown-item">
+                                                <i class="fas fa-sign-out-alt"></i> Đăng xuất
+                                            </button>
+                                        </form>
+                                    </li>
+                                </ul>
+                            </li>
+                        @else
                             <li class="nav-item">
                                 <a class="nav-link" href="{{ route('login') }}">Login</a>
                             </li>
                             <li class="nav-item">
                                 <a class="nav-link" href="{{ route('register') }}">Register</a>
                             </li>
-                        @else
-                            <li class="nav-item dropdown">
-                                <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button"
-                                    data-bs-toggle="dropdown" aria-expanded="false">
-                                    {{ Auth::user()->name }}
-                                </a>
-                                <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
-                                    @if(Auth::user()->is_admin)
-                                        <li>
-                                            <a class="dropdown-item" href="{{ route('admin.dashboard') }}">Admin Dashboard</a>
-                                        </li>
-                                    @endif
-                                    <li><hr class="dropdown-divider"></li>
-                                    <li>
-                                        <form action="{{ route('logout') }}" method="POST">
-                                            @csrf
-                                            <button type="submit" class="dropdown-item">Logout</button>
-                                        </form>
-                                    </li>
-                                </ul>
-                            </li>
-                        @endguest
+                        @endauth
                     </ul>
                 </div>
             </div>
