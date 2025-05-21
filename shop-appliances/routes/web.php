@@ -12,7 +12,8 @@ use App\Http\Controllers\Admin\{
     CategoryController,
     ProductController as AdminProductController,
     OrderController,
-    UserController
+    UserController,
+    SlideController
 };
 use Illuminate\Support\Facades\Route;
 
@@ -63,6 +64,9 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(fun
     Route::get('/users/{user}/edit', [UserController::class, 'edit'])->name('users.edit');
     Route::patch('/users/{user}', [UserController::class, 'update'])->name('users.update');
     Route::delete('/users/{user}', [UserController::class, 'destroy'])->name('users.destroy');
+
+    // Slides
+    Route::resource('slides', SlideController::class);
 });
 
 require __DIR__.'/auth.php';

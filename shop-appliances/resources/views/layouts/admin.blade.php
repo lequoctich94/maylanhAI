@@ -41,6 +41,24 @@
             background-color: #fff;
             box-shadow: 0 0.125rem 0.25rem rgba(0,0,0,0.075);
         }
+        
+        /* Submenu styles */
+        .sidebar .nav-link.dropdown-toggle::after {
+            margin-left: auto;
+        }
+        
+        .sidebar .collapse .nav-link {
+            padding-left: 2.5rem;
+            font-size: 0.9rem;
+        }
+        
+        .sidebar .collapse .nav-link.active {
+            background-color: rgba(13, 110, 253, 0.8);
+        }
+        
+        .sidebar .collapse .nav-link:hover {
+            background-color: rgba(255, 255, 255, 0.15);
+        }
     </style>
     @stack('styles')
 </head>
@@ -87,6 +105,28 @@
                             <i class="fas fa-users"></i>
                             <span>Users</span>
                         </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link dropdown-toggle {{ request()->routeIs('admin.slides.*') ? 'active' : '' }}" 
+                           href="#settingsSubmenu" 
+                           data-bs-toggle="collapse" 
+                           role="button" 
+                           aria-expanded="{{ request()->routeIs('admin.slides.*') ? 'true' : 'false' }}">
+                            <i class="fas fa-cog"></i>
+                            <span>Settings</span>
+                        </a>
+                        <div class="collapse {{ request()->routeIs('admin.slides.*') ? 'show' : '' }}" id="settingsSubmenu">
+                            <ul class="nav flex-column ms-3">
+                                <li class="nav-item">
+                                    <a class="nav-link {{ request()->routeIs('admin.slides.*') ? 'active' : '' }}" 
+                                       href="{{ route('admin.slides.index') }}">
+                                        <i class="fas fa-images"></i>
+                                        <span>Sliders</span>
+                                    </a>
+                                </li>
+                                <!-- Add more settings items here -->
+                            </ul>
+                        </div>
                     </li>
                     <li class="nav-item mt-4">
                         <a class="nav-link" href="{{ route('home') }}" target="_blank">

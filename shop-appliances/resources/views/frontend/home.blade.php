@@ -16,7 +16,7 @@
         <div class="carousel-inner">
             @foreach($slides as $key => $slide)
             <div class="carousel-item {{ $key == 0 ? 'active' : '' }}">
-                <img src="{{ asset('images/slides/' . $slide->image) }}" class="d-block w-100" alt="{{ $slide->title }}">
+                <img src="{{ asset('storage/' . $slide->image) }}" class="d-block w-100" alt="{{ $slide->title }}">
                 <div class="carousel-caption d-none d-md-block">
                     <h2>{{ $slide->title }}</h2>
                     <p>{{ $slide->subtitle }}</p>
