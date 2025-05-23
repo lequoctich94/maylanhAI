@@ -9,14 +9,76 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     @stack('styles')
+    <style>
+        .nav-item.dropdown .dropdown-toggle::after {
+            display: none; /* Ẩn mũi tên dropdown mặc định */
+        }
+        
+        .navbar {
+            transition: all 0.3s ease;
+        }
+
+        .navbar-fixed {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1030;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            animation: slideDown 0.35s ease-out;
+        }
+
+        .navbar-hidden {
+            transform: translateY(-100%);
+        }
+
+        @keyframes slideDown {
+            from {
+                transform: translateY(-100%);
+            }
+            to {
+                transform: translateY(0);
+            }
+        }
+
+        /* Thêm padding-top cho body khi navbar fixed */
+        body.has-fixed-nav {
+            padding-top: 56px; /* Điều chỉnh theo chiều cao của navbar */
+        }
+
+        /* Styles cho thanh tìm kiếm */
+        .navbar .search-form {
+            min-width: 400px; /* Tăng độ rộng tối thiểu */
+        }
+
+        .navbar .search-form .form-control {
+            border-radius: 20px 0 0 20px; /* Bo tròn góc trái */
+            border: none;
+            padding-left: 20px; /* Thêm padding bên trái */
+        }
+
+        .navbar .search-form .btn {
+            border-radius: 0 20px 20px 0; /* Bo tròn góc phải */
+            border: none;
+            padding: 0 20px; /* Thêm padding 2 bên */
+        }
+
+        /* Style cho logo */
+        .navbar-brand img {
+            height: 40px; /* Điều chỉnh chiều cao của logo */
+            width: auto;
+            margin-right: 10px;
+        }
+    </style>
 </head>
 <body>
     <!-- Header -->
     <header>
-        <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <nav class="navbar navbar-expand-lg navbar-light" style="background-color: #2A83E9;">
             <div class="container">
-                <a class="navbar-brand" href="{{ route('home') }}">
-                    {{ config('app.name') }}
+                <a class="navbar-brand text-white d-flex align-items-center" href="{{ route('home') }}">
+                    <img src="{{ asset('img/logo.png') }}" alt="{{ config('app.name') }} Logo">
+                    <span style="font-size: 20px; font-weight: bold; color: yellow;">ĐIỆN LẠNH 100V</span>
                 </a>
                 
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
@@ -25,15 +87,9 @@
                 
                 <div class="collapse navbar-collapse" id="navbarNav">
                     <ul class="navbar-nav me-auto">
-                        <li class="nav-item">
-                            <a class="nav-link" href="{{ route('home') }}">Home</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="{{ route('products.index') }}">Products</a>
-                        </li>
                         <li class="nav-item dropdown">
-                            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown">
-                                Categories
+                            <a class="nav-link dropdown-toggle text-white" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown">
+                                <i class="fas fa-bars"></i> Danh mục
                             </a>
                             <ul class="dropdown-menu">
                                 @foreach($categories as $category)
@@ -45,11 +101,26 @@
                                 @endforeach
                             </ul>
                         </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-white" href="{{ route('products.index') }}">Sản Phẩm</a>
+                        </li>
+                        
+                        <!-- Thêm form tìm kiếm -->
+                        <li class="nav-item">
+                            <form class="d-flex ms-3 search-form">
+                                <div class="input-group">
+                                    <input class="form-control" type="search" placeholder="Tìm kiếm sản phẩm..." aria-label="Search">
+                                    <button class="btn btn-light" type="submit">
+                                        <i class="fas fa-search"></i>
+                                    </button>
+                                </div>
+                            </form>
+                        </li>
                     </ul>
                     
                     <ul class="navbar-nav">
                         <li class="nav-item">
-                            <a class="nav-link" href="{{ route('cart.index') }}">
+                            <a class="nav-link text-white" href="{{ route('cart.index') }}">
                                 <i class="fas fa-shopping-cart"></i> Giỏ hàng
                                 @auth
                                     @if(auth()->user()->carts()->count() > 0)
@@ -60,7 +131,7 @@
                         </li>
                         @auth
                             <li class="nav-item dropdown">
-                                <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-bs-toggle="dropdown">
+                                <a class="nav-link dropdown-toggle text-white" href="#" id="userDropdown" role="button" data-bs-toggle="dropdown">
                                     <i class="fas fa-user"></i> {{ auth()->user()->name }}
                                 </a>
                                 <ul class="dropdown-menu dropdown-menu-end">
@@ -89,10 +160,10 @@
                             </li>
                         @else
                             <li class="nav-item">
-                                <a class="nav-link" href="{{ route('login') }}">Login</a>
+                                <a class="nav-link text-white" href="{{ route('login') }}">Đăng Nhập</a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link" href="{{ route('register') }}">Register</a>
+                                <a class="nav-link text-white" href="{{ route('register') }}">Đăng Ký</a>
                             </li>
                         @endauth
                     </ul>
@@ -151,6 +222,48 @@
 
     <!-- Scripts -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    
+    <script>
+        // Hiển thị navbar khi scroll xuống
+        document.addEventListener('DOMContentLoaded', function() {
+            let navbar = document.querySelector('.navbar');
+            let lastScroll = 0;
+            let scrollThreshold = 100; // Ngưỡng scroll để bắt đầu fixed
+            let scrollTimeout;
+
+            window.addEventListener('scroll', function() {
+                clearTimeout(scrollTimeout);
+                
+                let currentScroll = window.pageYOffset;
+                
+                // Khi scroll xuống và vượt qua ngưỡng
+                if (currentScroll > scrollThreshold) {
+                    document.body.classList.add('has-fixed-nav');
+                    navbar.classList.add('navbar-fixed');
+                    
+                    // Nếu scroll xuống
+                    if (currentScroll > lastScroll) {
+                        scrollTimeout = setTimeout(() => {
+                            navbar.classList.add('navbar-hidden');
+                        }, 500); // Đợi 500ms trước khi ẩn navbar
+                    } 
+                    // Nếu scroll lên
+                    else {
+                        navbar.classList.remove('navbar-hidden');
+                    }
+                } 
+                // Khi scroll về đầu trang
+                else {
+                    document.body.classList.remove('has-fixed-nav');
+                    navbar.classList.remove('navbar-fixed', 'navbar-hidden');
+                }
+                
+                lastScroll = currentScroll;
+            });
+        });
+        // KẾT THÚC HIỂN THỊ NAVBAR KHI SCROLL XUỐNG
+    </script>
+    
     @stack('scripts')
 </body>
 </html> 
