@@ -18,6 +18,7 @@
                     <thead>
                         <tr>
                             <th>ID</th>
+                            <th>Image</th>
                             <th>Name</th>
                             <th>Slug</th>
                             <th>Status</th>
@@ -28,6 +29,16 @@
                         @foreach($categories as $category)
                         <tr>
                             <td>{{ $category->id }}</td>
+                            <td>
+                                @if($category->image)
+                                    <img src="{{ asset('storage/' . $category->image) }}" 
+                                         alt="{{ $category->name }}" 
+                                         class="img-thumbnail"
+                                         style="max-height: 50px">
+                                @else
+                                    <span class="text-muted">No image</span>
+                                @endif
+                            </td>
                             <td>{{ $category->name }}</td>
                             <td>{{ $category->slug }}</td>
                             <td>

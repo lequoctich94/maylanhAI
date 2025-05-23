@@ -11,18 +11,34 @@
     </nav>
 
     <div class="row">
-        <!-- Category Info -->
-        <div class="col-12 mb-4">
-            <div class="card">
-                <div class="card-body">
-                    <h1 class="card-title">{{ $category->name }}</h1>
-                    <p class="card-text">{{ $category->description }}</p>
+        <!-- Sidebar Filters -->
+        <div class="col-md-3">
+            <div class="card mb-4">
+                <div class="card-header bg-primary text-white">
+                    <h5 class="mb-0"><i class="fas fa-list me-2"></i>Danh mục sản phẩm</h5>
+                </div>
+                <div class="card-body p-0">
+                    <div class="list-group list-group-flush">
+                        @foreach($categories as $cat)
+                            <a href="{{ route('products.category', $cat->slug) }}" 
+                               class="list-group-item list-group-item-action d-flex align-items-center {{ $cat->id === $category->id ? 'bg-light' : '' }}">
+                                <img src="{{ asset('storage/' . $cat->image) }}" 
+                                     alt="{{ $cat->name }}"
+                                     class="me-3"
+                                     style="width: 40px; height: 40px; object-fit: cover;">
+                                <div class="flex-grow-1">
+                                    {{ $cat->name }}
+                                    <small class="text-muted d-block">({{ $cat->products_count ?? 0 }} sản phẩm)</small>
+                                </div>
+                            </a>
+                        @endforeach
+                    </div>
                 </div>
             </div>
         </div>
 
         <!-- Products Grid -->
-        <div class="col-12">
+        <div class="col-md-9">
             <div class="row">
                 @forelse($products as $product)
                     <div class="col-md-4 mb-4">

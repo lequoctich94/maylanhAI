@@ -7,15 +7,22 @@
         <!-- Sidebar Filters -->
         <div class="col-md-3">
             <div class="card mb-4">
-                <div class="card-header">
-                    <h5 class="mb-0">Categories</h5>
+                <div class="card-header bg-primary text-white">
+                    <h5 class="mb-0"><i class="fas fa-list me-2"></i>Danh mục sản phẩm</h5>
                 </div>
-                <div class="card-body">
-                    <div class="list-group">
+                <div class="card-body p-0">
+                    <div class="list-group list-group-flush">
                         @foreach($categories as $category)
                             <a href="{{ route('products.category', $category->slug) }}" 
-                               class="list-group-item list-group-item-action">
-                                {{ $category->name }}
+                               class="list-group-item list-group-item-action d-flex align-items-center">
+                                <img src="{{ asset('storage/' . $category->image) }}" 
+                                     alt="{{ $category->name }}"
+                                     class="me-3"
+                                     style="width: 40px; height: 40px; object-fit: cover;">
+                                <div class="flex-grow-1">
+                                    {{ $category->name }}
+                                    <small class="text-muted d-block">({{ $category->products_count ?? 0 }} sản phẩm)</small>
+                                </div>
                             </a>
                         @endforeach
                     </div>
@@ -26,7 +33,7 @@
         <!-- Products Grid -->
         <div class="col-md-9">
             <div class="d-flex justify-content-between align-items-center mb-4">
-                <h2>All Products</h2>
+                <h2>Tất cả sản phẩm</h2>
                 <div class="btn-group">
                     <button type="button" class="btn btn-outline-secondary dropdown-toggle" data-bs-toggle="dropdown">
                         Sort By

@@ -69,6 +69,109 @@
             width: auto;
             margin-right: 10px;
         }
+
+        .category-dropdown {
+            position: static;
+        }
+
+        .category-menu {
+            width: 100%;
+            padding: 20px;
+            border: none;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            border-radius: 0 0 10px 10px;
+            margin-top: 0;
+        }
+
+        .category-item {
+            margin-bottom: 15px;
+        }
+
+        .category-item .dropdown-item {
+            display: flex;
+            align-items: center;
+            padding: 10px;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+        }
+
+        .category-item .dropdown-item:hover {
+            background-color: #f8f9fa;
+            transform: translateX(5px);
+        }
+
+        .category-icon {
+            width: 40px;
+            height: 40px;
+            object-fit: cover;
+            border-radius: 8px;
+            margin-right: 12px;
+        }
+
+        .category-icon-fallback {
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background-color: #e9ecef;
+            border-radius: 8px;
+            margin-right: 12px;
+            color: #2A83E9;
+            font-size: 1.2rem;
+        }
+
+        .category-info {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .category-name {
+            font-weight: 500;
+            color: #2A83E9;
+            margin-bottom: 2px;
+        }
+
+        .category-count {
+            font-size: 0.8rem;
+        }
+
+        /* Animation cho dropdown */
+        .dropdown-menu.show {
+            animation: slideDown 0.3s ease-out;
+        }
+
+        @keyframes slideDown {
+            from {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Hover effect cho nút danh mục */
+        .nav-link.dropdown-toggle {
+            position: relative;
+            padding-right: 20px !important;
+        }
+
+        .nav-link.dropdown-toggle:after {
+            content: '\f107';
+            font-family: 'Font Awesome 5 Free';
+            font-weight: 900;
+            position: absolute;
+            right: 0;
+            top: 50%;
+            transform: translateY(-50%);
+            transition: transform 0.3s ease;
+        }
+
+        .nav-link.dropdown-toggle[aria-expanded="true"]:after {
+            transform: translateY(-50%) rotate(180deg);
+        }
     </style>
 </head>
 <body>
@@ -87,19 +190,37 @@
                 
                 <div class="collapse navbar-collapse" id="navbarNav">
                     <ul class="navbar-nav me-auto">
-                        <li class="nav-item dropdown">
+                        <li class="nav-item dropdown category-dropdown">
                             <a class="nav-link dropdown-toggle text-white" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown">
-                                <i class="fas fa-bars"></i> Danh mục
+                                <i class="fas fa-bars me-2"></i> Danh mục sản phẩm
                             </a>
-                            <ul class="dropdown-menu">
-                                @foreach($categories as $category)
-                                    <li>
-                                        <a class="dropdown-item" href="{{ route('products.category', $category->slug) }}">
-                                            {{ $category->name }}
-                                        </a>
-                                    </li>
-                                @endforeach
-                            </ul>
+                            <div class="dropdown-menu category-menu">
+                                <div class="container">
+                                    <div class="row">
+                                        @foreach($categories->chunk(4) as $categoryGroup)
+                                            <div class="col-md-3">
+                                                @foreach($categoryGroup as $category)
+                                                    <div class="category-item">
+                                                        <a class="dropdown-item" href="{{ route('products.category', $category->slug) }}">
+                                                            @if($category->image)
+                                                                <img src="{{ asset('storage/' . $category->image) }}" alt="{{ $category->name }}" class="category-icon">
+                                                            @else
+                                                                <i class="fas fa-box category-icon-fallback"></i>
+                                                            @endif
+                                                            <div class="category-info">
+                                                                <span class="category-name">{{ $category->name }}</span>
+                                                                <small class="category-count text-muted">
+                                                                    {{ $category->products_count ?? 0 }} sản phẩm
+                                                                </small>
+                                                            </div>
+                                                        </a>
+                                                    </div>
+                                                @endforeach
+                                            </div>
+                                        @endforeach
+                                    </div>
+                                </div>
+                            </div>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link text-white" href="{{ route('products.index') }}">Sản Phẩm</a>

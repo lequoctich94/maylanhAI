@@ -10,7 +10,7 @@ class ProductController extends Controller
 {
     public function index()
     {
-        $categories = Category::active()->get();
+        $categories = Category::active()->withCount('products')->get();
         $products = Product::active()
             ->with('category')
             ->when(request('sort'), function($query) {
@@ -46,10 +46,11 @@ class ProductController extends Controller
             abort(404);
         }
 
+        $categories = Category::active()->withCount('products')->get();
         $products = $category->products()
             ->active()
             ->paginate(12);
 
-        return view('frontend.products.category', compact('category', 'products'));
+        return view('frontend.products.category', compact('category', 'products', 'categories'));
     }
 } 
