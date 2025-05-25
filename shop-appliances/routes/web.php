@@ -13,7 +13,9 @@ use App\Http\Controllers\Admin\{
     ProductController as AdminProductController,
     OrderController,
     UserController,
-    SlideController
+    SlideController,
+    CategoryAttributeController,
+    AttributeController
 };
 use Illuminate\Support\Facades\Route;
 
@@ -67,6 +69,11 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(fun
 
     // Slides
     Route::resource('slides', SlideController::class);
+
+    // Category Attributes
+    Route::resource('attributes', AttributeController::class);
+    Route::get('/categories/{category}/attributes', [CategoryAttributeController::class, 'getAttributes'])
+        ->name('categories.attributes');
 });
 
 require __DIR__.'/auth.php';

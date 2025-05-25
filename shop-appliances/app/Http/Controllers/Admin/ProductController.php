@@ -33,13 +33,15 @@ class ProductController extends Controller
             'discount_price' => 'nullable|numeric|min:0|lt:price',
             'stock' => 'required|integer|min:0',
             'image' => 'required|image|mimes:jpeg,png,jpg|max:2048',
+            'attributes' => 'array',
+            'attributes.*' => 'nullable'
         ]);
-
+  
         if ($request->hasFile('image')) {
             $imagePath = $request->file('image')->store('products', 'public');
         }
 
-        Product::create([
+        $product = Product::create([
             'name' => $request->name,
             'slug' => Str::slug($request->name),
             'category_id' => $request->category_id,
@@ -50,6 +52,16 @@ class ProductController extends Controller
             'image' => $imagePath ?? null,
             'is_active' => $request->boolean('is_active', true),
         ]);
+       
+        // Save attributes
+        if (isset($request->all()['attributes'])) {
+            foreach ($request->all()['attributes'] as $attributeId => $value) {
+                $product->attributes()->create([
+                    'attribute_id' => $attributeId,
+                    'value' => $value
+                ]);
+            }
+        }
 
         return redirect()->route('admin.products.index')
             ->with('success', 'Product created successfully');
@@ -70,7 +82,9 @@ class ProductController extends Controller
             'price' => 'required|numeric|min:0',
             'discount_price' => 'nullable|numeric|min:0|lt:price',
             'stock' => 'required|integer|min:0',
-            'image' => 'nullable|image|mimes:jpeg,png,jpg|max:2048'
+            'image' => 'nullable|image|mimes:jpeg,png,jpg|max:2048',
+            'attributes' => 'array',
+            'attributes.*' => 'nullable'
         ]);
 
         $data = [
@@ -98,6 +112,20 @@ class ProductController extends Controller
         }
 
         $product->update($data);
+
+        // Update attributes
+        if (isset($request->all()['attributes'])) {
+            // Delete old attributes
+            $product->attributes()->delete();
+            
+            // Create new attributes
+            foreach ($request->all()['attributes'] as $attributeId => $value) {
+                $product->attributes()->create([
+                    'attribute_id' => $attributeId,
+                    'value' => $value
+                ]);
+            }
+        }
 
         return redirect()->route('admin.products.index')
             ->with('success', 'Product updated successfully.');

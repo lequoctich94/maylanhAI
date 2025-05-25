@@ -39,6 +39,10 @@
                     @enderror
                 </div>
 
+                <div id="category-attributes">
+                    <!-- Dynamic attributes will be loaded here -->
+                </div>
+
                 <div class="mb-3">
                     <label for="description" class="form-label">Description</label>
                     <textarea class="form-control @error('description') is-invalid @enderror" 
@@ -115,4 +119,79 @@
         </div>
     </div>
 </div>
-@endsection 
+@endsection
+
+@push('scripts')
+<script>
+document.getElementById('category_id').addEventListener('change', function() {
+    const categoryId = this.value;
+    if (categoryId) {
+        fetch(`/admin/categories/${categoryId}/attributes`)
+            .then(response => response.json())
+            .then(attributes => {
+                const container = document.getElementById('category-attributes');
+                container.innerHTML = '';
+                
+                attributes.forEach(attr => {
+                    const div = document.createElement('div');
+                    div.className = 'mb-3';
+                    
+                    // Find existing value for this attribute
+                    const existingValue = @json($product->attributes->pluck('value', 'attribute_id'))[attr.id];
+                    
+                    let inputHtml = '';
+                    if (attr.type === 'select') {
+                        // Create select element for select type
+                        inputHtml = `
+                            <select class="form-control @error('attributes.${attr.id}') is-invalid @enderror"
+                                    id="attr_${attr.id}" 
+                                    name="attributes[${attr.id}]"
+                                    ${attr.is_required ? 'required' : ''}>
+                                <option value="">Select ${attr.name}</option>
+                                ${attr.options.map(option => `
+                                    <option value="${option}" ${existingValue === option ? 'selected' : ''}>
+                                        ${option}
+                                    </option>
+                                `).join('')}
+                            </select>
+                        `;
+                    } else {
+                        // Create regular input for other types
+                        inputHtml = `
+                            <input type="${attr.type}" 
+                                   class="form-control @error('attributes.${attr.id}') is-invalid @enderror"
+                                   id="attr_${attr.id}" 
+                                   name="attributes[${attr.id}]"
+                                   value="${existingValue || ''}"
+                                   ${attr.is_required ? 'required' : ''}>
+                        `;
+                    }
+
+                    div.innerHTML = `
+                        <label for="attr_${attr.id}" class="form-label">${attr.name}</label>
+                        ${inputHtml}
+                        @error('attributes.${attr.id}')
+                            <div class="invalid-feedback">{{ $message }}</div>
+                        @enderror
+                    `;
+                    container.appendChild(div);
+                });
+            })
+            .catch(error => {
+                console.error('Error:', error);
+            });
+    } else {
+        // Clear attributes container if no category is selected
+        document.getElementById('category-attributes').innerHTML = '';
+    }
+});
+
+// Trigger change event if category is pre-selected
+document.addEventListener('DOMContentLoaded', function() {
+    const categorySelect = document.getElementById('category_id');
+    if (categorySelect.value) {
+        categorySelect.dispatchEvent(new Event('change'));
+    }
+});
+</script>
+@endpush 

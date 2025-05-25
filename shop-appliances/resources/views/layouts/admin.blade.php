@@ -128,6 +128,13 @@
                             </ul>
                         </div>
                     </li>
+                    <li class="nav-item">
+                        <a class="nav-link {{ request()->routeIs('admin.attributes.*') ? 'active' : '' }}" 
+                           href="{{ route('admin.attributes.index') }}">
+                            <i class="fas fa-tags"></i>
+                            <span>Attributes</span>
+                        </a>
+                    </li>
                     <li class="nav-item mt-4">
                         <a class="nav-link" href="{{ route('home') }}" target="_blank">
                             <i class="fas fa-external-link-alt"></i>
