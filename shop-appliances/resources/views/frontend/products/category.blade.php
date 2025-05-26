@@ -39,6 +39,67 @@
 
         <!-- Products Grid -->
         <div class="col-md-9">
+            <!-- Search Form -->
+            <div class="card mb-4">
+                <div class="card-body">
+                    <form action="{{ route('products.category', $category->slug) }}" method="GET" class="row g-3">
+                        <!-- Search by name -->
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label for="search" class="form-label">Tìm Kiếm Sản Phẩm</label>
+                                <input type="text" 
+                                       class="form-control" 
+                                       id="search" 
+                                       name="search" 
+                                       value="{{ request('search') }}"
+                                       placeholder="Enter product name...">
+                            </div>
+                        </div>
+
+                        <!-- Search by attributes -->
+                        @foreach($category->attributes as $attribute)
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <label for="attr_{{ $attribute->id }}" class="form-label">
+                                        {{ $attribute->name }}
+                                    </label>
+                                    @if($attribute->type === 'select')
+                                        <select class="form-select" 
+                                                id="attr_{{ $attribute->id }}" 
+                                                name="attributes[{{ $attribute->id }}]">
+                                            <option value="">All</option>
+                                            @foreach($attribute->options as $option)
+                                                <option value="{{ $option }}" 
+                                                    {{ request('attributes.'.$attribute->id) == $option ? 'selected' : '' }}>
+                                                    {{ $option }}
+                                                </option>
+                                            @endforeach
+                                        </select>
+                                    @else
+                                        <input type="text" 
+                                               class="form-control" 
+                                               id="attr_{{ $attribute->id }}" 
+                                               name="attributes[{{ $attribute->id }}]"
+                                               value="{{ request('attributes.'.$attribute->id) }}"
+                                               placeholder="Enter {{ $attribute->name }}...">
+                                    @endif
+                                </div>
+                            </div>
+                        @endforeach
+
+                        <div class="col-12">
+                            <button type="submit" class="btn btn-primary">
+                                <i class="fas fa-search"></i> Search
+                            </button>
+                            <a href="{{ route('products.category', $category->slug) }}" class="btn btn-secondary">
+                                <i class="fas fa-redo"></i> Reset
+                            </a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            <!-- Products List -->
             <div class="row">
                 @forelse($products as $product)
                     <div class="col-md-4 mb-4">
@@ -83,7 +144,7 @@
                 @empty
                     <div class="col-12">
                         <div class="alert alert-info">
-                            No products found in this category.
+                            No products found matching your search criteria.
                         </div>
                     </div>
                 @endforelse
@@ -91,7 +152,7 @@
 
             <!-- Pagination -->
             <div class="d-flex justify-content-center mt-4">
-                {{ $products->links() }}
+                {{ $products->appends(request()->query())->links() }}
             </div>
         </div>
     </div>

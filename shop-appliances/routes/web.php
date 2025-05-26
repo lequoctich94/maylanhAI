@@ -5,7 +5,8 @@ use App\Http\Controllers\Frontend\{
     ProductController,
     CartController,
     CheckoutController,
-    ProfileController
+    ProfileController,
+    SearchController
 };
 use App\Http\Controllers\Admin\{
     DashboardController,
@@ -25,6 +26,7 @@ Route::get('/', [HomeController::class, 'index'])->name('home');
 Route::get('/products', [ProductController::class, 'index'])->name('products.index');
 Route::get('/products/{product:slug}', [ProductController::class, 'show'])->name('products.show');
 Route::get('/category/{category:slug}', [ProductController::class, 'category'])->name('products.category');
+Route::get('/search', [SearchController::class, 'search'])->name('products.search');
 
 // Auth Routes
 Route::middleware('auth')->group(function () {

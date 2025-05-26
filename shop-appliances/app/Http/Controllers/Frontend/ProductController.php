@@ -37,6 +37,9 @@ class ProductController extends Controller
             abort(404);
         }
 
+        // Load attributes với thông tin attribute
+        $product->load(['attributes.attribute']);
+        
         return view('frontend.products.show', compact('product'));
     }
 
@@ -47,8 +50,25 @@ class ProductController extends Controller
         }
 
         $categories = Category::active()->withCount('products')->get();
+        
+        // Load attributes của category
+        $category->load('attributes');
+        
         $products = $category->products()
             ->active()
+            ->when(request('search'), function($query) {
+                $query->where('name', 'like', '%' . request('search') . '%');
+            })
+            ->when(request('attributes'), function($query) {
+                foreach(request('attributes') as $attributeId => $value) {
+                    if ($value) {
+                        $query->whereHas('attributes', function($q) use ($attributeId, $value) {
+                            $q->where('attribute_id', $attributeId)
+                              ->where('value', 'like', '%' . $value . '%');
+                        });
+                    }
+                }
+            })
             ->paginate(12);
 
         return view('frontend.products.category', compact('category', 'products', 'categories'));

@@ -45,6 +45,37 @@
                 <p>{{ $product->description }}</p>
             </div>
 
+            <!-- Product Information -->
+            <div class="card mb-4">
+                <div class="card-body">
+                    <h5 class="card-title">Product Information</h5>
+                    <table class="table table-borderless mb-0">
+                        <tr>
+                            <td>Category:</td>
+                            <td>{{ $product->category->name }}</td>
+                        </tr>
+                        <tr>
+                            <td>Availability:</td>
+                            <td>
+                                @if($product->is_active)
+                                    <span class="badge bg-success">In Stock</span>
+                                @else
+                                    <span class="badge bg-danger">Out of Stock</span>
+                                @endif
+                            </td>
+                        </tr>
+                        @foreach($product->attributes as $productAttribute)
+                            @if($productAttribute->value)
+                                <tr>
+                                    <td>{{ $productAttribute->attribute->name }}:</td>
+                                    <td>{{ $productAttribute->value }}</td>
+                                </tr>
+                            @endif
+                        @endforeach
+                    </table>
+                </div>
+            </div>
+
             @auth
                 <form action="{{ route('cart.add') }}" method="POST" class="mb-4">
                     @csrf
@@ -70,29 +101,6 @@
                     Please <a href="{{ route('login') }}">login</a> to add items to cart.
                 </div>
             @endauth
-
-            <!-- Additional Product Information -->
-            <div class="card mt-4">
-                <div class="card-body">
-                    <h5 class="card-title">Product Information</h5>
-                    <table class="table table-borderless mb-0">
-                        <tr>
-                            <td>Category:</td>
-                            <td>{{ $product->category->name }}</td>
-                        </tr>
-                        <tr>
-                            <td>Availability:</td>
-                            <td>
-                                @if($product->is_active)
-                                    <span class="badge bg-success">In Stock</span>
-                                @else
-                                    <span class="badge bg-danger">Out of Stock</span>
-                                @endif
-                            </td>
-                        </tr>
-                    </table>
-                </div>
-            </div>
         </div>
     </div>
 @endsection 

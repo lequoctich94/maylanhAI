@@ -228,9 +228,14 @@
                         
                         <!-- Thêm form tìm kiếm -->
                         <li class="nav-item">
-                            <form class="d-flex ms-3 search-form">
+                            <form class="d-flex ms-3 search-form" action="{{ route('products.search') }}" method="GET">
                                 <div class="input-group">
-                                    <input class="form-control" type="search" placeholder="Tìm kiếm sản phẩm..." aria-label="Search">
+                                    <input class="form-control" 
+                                           type="search" 
+                                           name="q"
+                                           value="{{ request('q') }}"
+                                           placeholder="Tìm kiếm sản phẩm..." 
+                                           aria-label="Search">
                                     <button class="btn btn-light" type="submit">
                                         <i class="fas fa-search"></i>
                                     </button>
