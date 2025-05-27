@@ -126,9 +126,20 @@
                                         </div>
                                     @endif
                                 </div>
-                                <button class="btn btn-primary btn-sm w-100 add-to-cart">
-                                    <i class="fas fa-shopping-cart me-1"></i>Đặt hàng
-                                </button>
+                                @if($product->is_active)
+                                    <form action="{{ route('cart.add') }}" method="POST" class="mt-3 add-to-cart-form">
+                                        @csrf
+                                        <input type="hidden" name="product_id" value="{{ $product->id }}">
+                                        <input type="hidden" name="quantity" value="1">
+                                        <button type="submit" class="btn btn-primary btn-sm w-100">
+                                            <i class="fas fa-shopping-cart"></i> Đặt hàng
+                                        </button>
+                                    </form>
+                                @else
+                                    <div class="alert alert-warning mt-3 py-2 mb-0">
+                                        Hết hàng
+                                    </div>
+                                @endif
                             </div>
                         </div>
                     </div>
@@ -395,5 +406,98 @@
 .product-card .card-body {
     text-align: left;
 }
+
+.btn-primary {
+    background-color: #2A83E9;
+    border: none;
+    padding: 8px 15px;
+    font-size: 0.9rem;
+    transition: all 0.3s ease;
+}
+
+.btn-primary:hover {
+    background-color: #1565C0;
+    transform: translateY(-2px);
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+}
+
+.alert-warning {
+    font-size: 0.9rem;
+    padding: 8px 15px;
+    margin-bottom: 0;
+}
+
+.cart-notification {
+    position: absolute;
+    top: -8px;
+    right: -8px;
+    background-color: #ff4444;
+    color: white;
+    border-radius: 50%;
+    width: 20px;
+    height: 20px;
+    font-size: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    transform: scale(0);
+    transition: all 0.3s ease;
+}
+
+.cart-notification.show {
+    opacity: 1;
+    transform: scale(1);
+}
+
+@keyframes bounce {
+    0%, 20%, 50%, 80%, 100% {
+        transform: translateY(0);
+    }
+    40% {
+        transform: translateY(-10px);
+    }
+    60% {
+        transform: translateY(-5px);
+    }
+}
+
+.bounce {
+    animation: bounce 0.5s ease;
+}
 </style>
+@endpush
+
+@push('scripts')
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const forms = document.querySelectorAll('.add-to-cart-form');
+    
+    forms.forEach(form => {
+        form.addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            // Tạo thông báo
+            const notification = document.createElement('div');
+            notification.className = 'cart-notification';
+            notification.textContent = '1';
+            
+            // Thêm thông báo vào nút
+            const button = this.querySelector('button');
+            button.style.position = 'relative';
+            button.appendChild(notification);
+            
+            // Hiển thị thông báo với animation
+            setTimeout(() => {
+                notification.classList.add('show', 'bounce');
+            }, 100);
+            
+            // Gửi form sau khi hiển thị thông báo
+            setTimeout(() => {
+                this.submit();
+            }, 500);
+        });
+    });
+});
+</script>
 @endpush 

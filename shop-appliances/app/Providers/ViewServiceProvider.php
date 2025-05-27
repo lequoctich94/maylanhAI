@@ -16,7 +16,10 @@ class ViewServiceProvider extends ServiceProvider
     public function boot()
     {
         View::composer('layouts.frontend', function ($view) {
-            $view->with('categories', Category::active()->withCount('products')->get());
+            $view->with([
+                'categories' => Category::active()->withCount('products')->get(),
+                'cartCount' => session('cart') ? count(session('cart')) : 0
+            ]);
         });
     }
 } 

@@ -172,6 +172,34 @@
         .nav-link.dropdown-toggle[aria-expanded="true"]:after {
             transform: translateY(-50%) rotate(180deg);
         }
+
+        .cart-badge {
+            position: absolute;
+            top: -8px;
+            right: -8px;
+            background-color: #ff4444;
+            color: white;
+            border-radius: 50%;
+            width: 20px;
+            height: 20px;
+            font-size: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            animation: bounce 0.5s ease;
+        }
+
+        @keyframes bounce {
+            0%, 20%, 50%, 80%, 100% {
+                transform: translateY(0);
+            }
+            40% {
+                transform: translateY(-10px);
+            }
+            60% {
+                transform: translateY(-5px);
+            }
+        }
     </style>
 </head>
 <body>
@@ -246,13 +274,11 @@
                     
                     <ul class="navbar-nav">
                         <li class="nav-item">
-                            <a class="nav-link text-white" href="{{ route('cart.index') }}">
+                            <a class="nav-link text-white position-relative" href="{{ route('cart.index') }}">
                                 <i class="fas fa-shopping-cart"></i> Giỏ hàng
-                                @auth
-                                    @if(auth()->user()->carts()->count() > 0)
-                                        <span class="badge bg-danger">{{ auth()->user()->carts()->count() }}</span>
-                                    @endif
-                                @endauth
+                                @if($cartCount > 0)
+                                    <span class="cart-badge">{{ $cartCount }}</span>
+                                @endif
                             </a>
                         </li>
                         @auth
