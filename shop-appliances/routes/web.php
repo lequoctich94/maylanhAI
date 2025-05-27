@@ -28,19 +28,19 @@ Route::get('/products/{product:slug}', [ProductController::class, 'show'])->name
 Route::get('/category/{category:slug}', [ProductController::class, 'category'])->name('products.category');
 Route::get('/search', [SearchController::class, 'search'])->name('products.search');
 
-// Auth Routes
+// Cart Routes (moved outside auth middleware)
+Route::get('/cart', [CartController::class, 'index'])->name('cart.index');
+Route::post('/cart/add', [CartController::class, 'add'])->name('cart.add');
+Route::put('/cart/update/{productId}', [CartController::class, 'update'])->name('cart.update');
+Route::delete('/cart/remove/{productId}', [CartController::class, 'remove'])->name('cart.remove');
+
+// Checkout Routes (moved outside auth middleware)
+Route::get('/checkout', [CheckoutController::class, 'index'])->name('checkout.index');
+Route::post('/checkout', [CheckoutController::class, 'store'])->name('checkout.store');
+Route::get('/checkout/{order}/success', [CheckoutController::class, 'success'])->name('checkout.success');
+
+// Profile Routes
 Route::middleware('auth')->group(function () {
-    // Cart Routes
-    Route::get('/cart', [CartController::class, 'index'])->name('cart.index');
-    Route::post('/cart/add', [CartController::class, 'add'])->name('cart.add');
-    Route::patch('/cart/{cart}', [CartController::class, 'update'])->name('cart.update');
-    Route::delete('/cart/{cart}', [CartController::class, 'remove'])->name('cart.remove');
-
-    // Checkout Routes
-    Route::get('/checkout', [CheckoutController::class, 'index'])->name('checkout.index');
-    Route::post('/checkout', [CheckoutController::class, 'store'])->name('checkout.store');
-    Route::get('/checkout/{order}/success', [CheckoutController::class, 'success'])->name('checkout.success');
-
     // Profile Routes
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');

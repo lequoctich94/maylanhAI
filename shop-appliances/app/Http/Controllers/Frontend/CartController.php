@@ -11,11 +11,19 @@ class CartController extends Controller
 {
     public function index()
     {
-        $cartItems = auth()->user()->carts()
-            ->with('product')
-            ->get();
+        $cartItems = session('cart', []);
+        $products = [];
+        $total = 0;
+        
+        if (!empty($cartItems)) {
+            $products = Product::whereIn('id', array_keys($cartItems))->get();
+            foreach ($products as $product) {
+                $product->quantity = $cartItems[$product->id];
+                $total += $product->price * $product->quantity;
+            }
+        }
 
-        return view('frontend.cart.index', compact('cartItems'));
+        return view('frontend.cart.index', compact('products', 'total'));
     }
 
     public function add(Request $request)
@@ -31,43 +39,37 @@ class CartController extends Controller
             return back()->with('error', 'Product is not available.');
         }
 
-        $cart = Cart::updateOrCreate(
-            [
-                'user_id' => auth()->id(),
-                'product_id' => $product->id
-            ],
-            [
-                'quantity' => $request->quantity
-            ]
-        );
+        $cart = session('cart', []);
+        $cart[$product->id] = $request->quantity;
+        session(['cart' => $cart]);
 
         return back()->with('success', 'Product added to cart successfully.');
     }
 
-    public function update(Request $request, Cart $cart)
+    public function update(Request $request, $productId)
     {
         $request->validate([
             'quantity' => 'required|integer|min:1'
         ]);
 
-        if ($cart->user_id !== auth()->id()) {
-            abort(403);
+        $cart = session('cart', []);
+        
+        if (isset($cart[$productId])) {
+            $cart[$productId] = $request->quantity;
+            session(['cart' => $cart]);
         }
-
-        $cart->update([
-            'quantity' => $request->quantity
-        ]);
 
         return response()->json(['message' => 'Cart updated successfully']);
     }
 
-    public function remove(Cart $cart)
+    public function remove($productId)
     {
-        if ($cart->user_id !== auth()->id()) {
-            abort(403);
+        $cart = session('cart', []);
+        
+        if (isset($cart[$productId])) {
+            unset($cart[$productId]);
+            session(['cart' => $cart]);
         }
-
-        $cart->delete();
 
         return back()->with('success', 'Product removed from cart successfully.');
     }

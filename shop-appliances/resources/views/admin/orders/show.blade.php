@@ -69,7 +69,7 @@
                     <table class="table table-borderless mb-0">
                         <tr>
                             <td>Name:</td>
-                            <td>{{ $order->user->name }}</td>
+                            <td>{{ $order->user ? $order->user->name : $order->name  }}</td>
                         </tr>
                         <tr>
                             <td>Email:</td>

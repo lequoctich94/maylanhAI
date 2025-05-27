@@ -97,7 +97,7 @@
                         @foreach($stats['recent_orders'] as $order)
                         <tr>
                             <td>{{ $order->id }}</td>
-                            <td>{{ $order->user->name }}</td>
+                            <td>{{ $order->user ? $order->user->name : $order->name  }}</td>
                             <td>${{ number_format($order->total_amount, 2) }}</td>
                             <td>
                                 <span class="badge bg-{{ $order->status === 'completed' ? 'success' : 'warning' }}">

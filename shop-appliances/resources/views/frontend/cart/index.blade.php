@@ -1,114 +1,139 @@
 @extends('layouts.frontend')
 
-@section('title', 'Shopping Cart')
-
 @section('content')
-    <h1 class="mb-4">Shopping Cart</h1>
+<div class="container py-5">
+    <h2 class="mb-4">Shopping Cart</h2>
 
-    @if($cartItems->count() > 0)
-        <div class="row">
-            <!-- Cart Items -->
-            <div class="col-md-8">
-                <div class="card">
-                    <div class="card-body">
-                        @foreach($cartItems as $item)
-                            <div class="row mb-4">
-                                <div class="col-md-3">
-                                    <img src="{{ asset('storage/' . $item->product->image) }}" 
-                                         class="img-fluid rounded" 
-                                         alt="{{ $item->product->name }}">
-                                </div>
-                                <div class="col-md-9">
-                                    <div class="d-flex justify-content-between align-items-center">
-                                        <h5 class="mb-0">
-                                            <a href="{{ route('products.show', $item->product->slug) }}" 
-                                               class="text-dark text-decoration-none">
-                                                {{ $item->product->name }}
-                                            </a>
-                                        </h5>
-                                        <form action="{{ route('cart.remove', $item->id) }}" 
-                                              method="POST" 
-                                              class="d-inline">
-                                            @csrf
-                                            @method('DELETE')
-                                            <button type="submit" 
-                                                    class="btn btn-link text-danger" 
-                                                    onclick="return confirm('Are you sure?')">
-                                                <i class="fas fa-trash"></i>
-                                            </button>
-                                        </form>
-                                    </div>
-                                    <div class="mt-2">
-                                        <p class="text-muted mb-0">
-                                            Price: ${{ $item->product->discount_price ?? $item->product->price }}
-                                        </p>
-                                        <div class="d-flex align-items-center mt-2">
-                                            <label class="me-2">Quantity:</label>
-                                            <input type="number" 
-                                                   class="form-control" 
-                                                   style="width: 80px;" 
-                                                   value="{{ $item->quantity }}" 
-                                                   min="1"
-                                                   data-item-id="{{ $item->id }}">
-                                        </div>
-                                    </div>
+    @if(count($products) > 0)
+        <div class="table-responsive">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Product</th>
+                        <th>Price</th>
+                        <th>Quantity</th>
+                        <th>Subtotal</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach($products as $product)
+                    <tr>
+                        <td>
+                            <div class="d-flex align-items-center">
+                                @if($product->image)
+                                    <img src="{{ asset('storage/' . $product->image) }}" alt="{{ $product->name }}" 
+                                        class="img-thumbnail" style="width: 80px; margin-right: 15px;">
+                                @endif
+                                <div>
+                                    <h6 class="mb-0">{{ $product->name }}</h6>
                                 </div>
                             </div>
-                            @unless($loop->last)
-                                <hr>
-                            @endunless
-                        @endforeach
-                    </div>
-                </div>
-            </div>
+                        </td>
+                        <td>${{ number_format($product->price, 2) }}</td>
+                        <td>
+                            <div class="input-group" style="width: 120px;">
+                                <button class="btn btn-outline-secondary decrease-quantity" type="button" 
+                                    data-product-id="{{ $product->id }}">-</button>
+                                <input type="number" class="form-control text-center quantity-input" 
+                                    value="{{ $product->quantity }}" min="1" 
+                                    data-product-id="{{ $product->id }}">
+                                <button class="btn btn-outline-secondary increase-quantity" type="button" 
+                                    data-product-id="{{ $product->id }}">+</button>
+                            </div>
+                        </td>
+                        <td>${{ number_format($product->price * $product->quantity, 2) }}</td>
+                        <td>
+                            <form action="{{ route('cart.remove', $product->id) }}" method="POST" class="d-inline">
+                                @csrf
+                                @method('DELETE')
+                                <button type="submit" class="btn btn-danger btn-sm">Remove</button>
+                            </form>
+                        </td>
+                    </tr>
+                    @endforeach
+                </tbody>
+                <tfoot>
+                    <tr>
+                        <td colspan="3" class="text-end"><strong>Total:</strong></td>
+                        <td colspan="2"><strong>${{ number_format($total, 2) }}</strong></td>
+                    </tr>
+                </tfoot>
+            </table>
+        </div>
 
-            <!-- Cart Summary -->
-            <div class="col-md-4">
-                <div class="card">
-                    <div class="card-body">
-                        <h5 class="card-title">Cart Summary</h5>
-                        <div class="d-flex justify-content-between mb-3">
-                            <span>Subtotal:</span>
-                            <span>${{ $cartItems->sum(function($item) {
-                                return ($item->product->discount_price ?? $item->product->price) * $item->quantity;
-                            }) }}</span>
-                        </div>
-                        <hr>
-                        <div class="d-grid">
-                            <a href="{{ route('checkout.index') }}" class="btn btn-primary">
-                                Proceed to Checkout
-                            </a>
-                        </div>
-                    </div>
-                </div>
-            </div>
+        <div class="d-flex justify-content-between mt-4">
+            <a href="{{ route('products.index') }}" class="btn btn-secondary">Continue Shopping</a>
+            <a href="{{ route('checkout.index') }}" class="btn btn-primary">Proceed to Checkout</a>
         </div>
     @else
-        <div class="alert alert-info">
-            Your cart is empty. <a href="{{ route('products.index') }}">Continue shopping</a>
+        <div class="text-center py-5">
+            <h4>Your cart is empty</h4>
+            <a href="{{ route('products.index') }}" class="btn btn-primary mt-3">Continue Shopping</a>
         </div>
     @endif
-@endsection
+</div>
 
 @push('scripts')
 <script>
-    // Update quantity with AJAX
-    document.querySelectorAll('input[type="number"]').forEach(input => {
-        input.addEventListener('change', function() {
-            const itemId = this.dataset.itemId;
-            const quantity = this.value;
-            
-            fetch(`/cart/${itemId}`, {
-                method: 'PATCH',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'X-CSRF-TOKEN': '{{ csrf_token() }}'
-                },
-                body: JSON.stringify({ quantity })
-            }).then(() => {
+document.addEventListener('DOMContentLoaded', function() {
+    // Update quantity
+    function updateQuantity(productId, quantity) {
+        fetch(`/cart/update/${productId}`, {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content
+            },
+            body: JSON.stringify({ quantity: quantity })
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.message) {
                 window.location.reload();
-            });
+            }
+        })
+        .catch(error => console.error('Error:', error));
+    }
+
+    // Decrease quantity
+    document.querySelectorAll('.decrease-quantity').forEach(button => {
+        button.addEventListener('click', function() {
+            const productId = this.dataset.productId;
+            const input = document.querySelector(`.quantity-input[data-product-id="${productId}"]`);
+            const currentValue = parseInt(input.value);
+            if (currentValue > 1) {
+                input.value = currentValue - 1;
+                updateQuantity(productId, currentValue - 1);
+            }
         });
     });
+
+    // Increase quantity
+    document.querySelectorAll('.increase-quantity').forEach(button => {
+        button.addEventListener('click', function() {
+            const productId = this.dataset.productId;
+            const input = document.querySelector(`.quantity-input[data-product-id="${productId}"]`);
+            const currentValue = parseInt(input.value);
+            input.value = currentValue + 1;
+            updateQuantity(productId, currentValue + 1);
+        });
+    });
+
+    // Input change
+    document.querySelectorAll('.quantity-input').forEach(input => {
+        input.addEventListener('change', function() {
+            const productId = this.dataset.productId;
+            const quantity = parseInt(this.value);
+            if (quantity > 0) {
+                updateQuantity(productId, quantity);
+            } else {
+                this.value = 1;
+                updateQuantity(productId, 1);
+            }
+        });
+    });
+});
 </script>
-@endpush 
+@endpush
+@endsection 

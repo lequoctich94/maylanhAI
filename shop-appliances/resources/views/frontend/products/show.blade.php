@@ -76,7 +76,7 @@
                 </div>
             </div>
 
-            @auth
+            @if($product->is_active)
                 <form action="{{ route('cart.add') }}" method="POST" class="mb-4">
                     @csrf
                     <input type="hidden" name="product_id" value="{{ $product->id }}">
@@ -97,10 +97,10 @@
                     </div>
                 </form>
             @else
-                <div class="alert alert-info">
-                    Please <a href="{{ route('login') }}">login</a> to add items to cart.
+                <div class="alert alert-warning">
+                    This product is currently out of stock.
                 </div>
-            @endauth
+            @endif
         </div>
     </div>
 @endsection 

@@ -8,82 +8,98 @@ use App\Models\OrderItem;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
-use Illuminate\Support\Facades\Auth;
+use App\Models\Product;
 
 class CheckoutController extends Controller
 {
     public function index()
     {
-        $cartItems = Auth::user()->carts()->with('product')->get();
-
-        if ($cartItems->isEmpty()) {
-            return redirect()->route('cart.index')
-                ->with('error', 'Your cart is empty.');
+        $cartItems = session('cart', []);
+        if (empty($cartItems)) {
+            return redirect()->route('cart.index')->with('error', 'Your cart is empty.');
         }
 
-        return view('frontend.checkout.index', compact('cartItems'));
+        $products = Product::whereIn('id', array_keys($cartItems))->get();
+        $total = 0;
+        
+        foreach ($products as $product) {
+            $product->quantity = $cartItems[$product->id];
+            $total += $product->price * $product->quantity;
+        }
+
+        // Get user info if logged in
+        $user = auth()->user();
+        $userData = $user ? [
+            'name' => $user->name,
+            'phone' => $user->phone
+        ] : null;
+
+        return view('frontend.checkout.index', compact('products', 'total', 'userData'));
     }
 
     public function store(Request $request)
     {
         $request->validate([
-            'shipping_address' => 'required|string|max:255',
-            'shipping_phone' => 'required|string|max:20',
-            'payment_method' => 'required|in:cod,bank_transfer'
+            'name' => 'required|string|max:255',
+            'phone' => 'required|string|max:20',
+            'address' => 'required|string|max:255',
+            'payment_method' => 'required|in:cod,bank_transfer',
         ]);
 
-        $cartItems = Auth::user()->carts()->with('product')->get();
+        $cartItems = session('cart', []);
+        if (empty($cartItems)) {
+            return redirect()->route('cart.index')->with('error', 'Your cart is empty.');
+        }
 
-        if ($cartItems->isEmpty()) {
-            return redirect()->route('cart.index')
-                ->with('error', 'Your cart is empty.');
+        $products = Product::whereIn('id', array_keys($cartItems))->get();
+        $total = 0;
+        $orderItems = [];
+
+        foreach ($products as $product) {
+            $quantity = $cartItems[$product->id];
+            $subtotal = $product->price * $quantity;
+            $total += $subtotal;
+            
+            $orderItems[] = [
+                'product_id' => $product->id,
+                'quantity' => $quantity,
+                'price' => $product->price,
+                'subtotal' => $subtotal
+            ];
         }
 
         try {
             DB::beginTransaction();
 
-            // Create order
             $order = Order::create([
-                'user_id' => auth()->id(),
-                'total_amount' => $cartItems->sum(function($item) {
-                    return ($item->product->discount_price ?? $item->product->price) * $item->quantity;
-                }),
+                'name' => $request->name,
+                'shipping_phone' => $request->phone,
+                'shipping_address' => $request->address,
+                'payment_method' => $request->payment_method,
+                'total_amount' => $total,
                 'status' => 'pending',
-                'shipping_address' => $request->shipping_address,
-                'shipping_phone' => $request->shipping_phone,
-                'payment_method' => $request->payment_method
+                'user_id' => auth()->id()
             ]);
 
-            // Create order items
-            foreach ($cartItems as $item) {
-                OrderItem::create([
-                    'order_id' => $order->id,
-                    'product_id' => $item->product_id,
-                    'quantity' => $item->quantity,
-                    'price' => $item->product->discount_price ?? $item->product->price
-                ]);
+            foreach ($orderItems as $item) {
+                $order->items()->create($item);
             }
-
-            // Clear cart
-            auth()->user()->carts()->delete();
 
             DB::commit();
 
-            return redirect()->route('checkout.success', $order);
+            // Clear the cart
+            session()->forget('cart');
 
+            return redirect()->route('checkout.success', $order);
         } catch (\Exception $e) {
             DB::rollBack();
-            Log::error('Order creation failed: ' . $e->getMessage());
-            return back()->with('error', 'Something went wrong. Please try again.');
+            Log::error('Checkout error: ' . $e->getMessage());
+            return back()->with('error', 'There was an error processing your order. Please try again.');
         }
     }
 
     public function success(Order $order)
     {
-        if ($order->user_id !== Auth::id()) {
-            abort(403);
-        }
-
         return view('frontend.checkout.success', compact('order'));
     }
 } 

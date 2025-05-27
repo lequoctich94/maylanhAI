@@ -25,7 +25,7 @@
                         @forelse($orders as $order)
                             <tr>
                                 <td>{{ $order->id }}</td>
-                                <td>{{ $order->user->name }}</td>
+                                <td>{{ $order->user ? $order->user->name : $order->name  }}</td>
                                 <td>{{ $order->total_amount }} đ</td>
                                 <td>
                                     @switch($order->status)
