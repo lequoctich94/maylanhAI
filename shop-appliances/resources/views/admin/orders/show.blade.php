@@ -73,7 +73,7 @@
                         </tr>
                         <tr>
                             <td>Email:</td>
-                            <td>{{ $order->user->email }}</td>
+                            <td>{{ $order->user ? $order->user->email : '' }}</td>
                         </tr>
                         <tr>
                             <td>Phone:</td>
