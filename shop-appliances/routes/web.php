@@ -6,7 +6,8 @@ use App\Http\Controllers\Frontend\{
     CartController,
     CheckoutController,
     ProfileController,
-    SearchController
+    SearchController,
+    BlogController
 };
 use App\Http\Controllers\Admin\{
     DashboardController,
@@ -16,7 +17,9 @@ use App\Http\Controllers\Admin\{
     UserController,
     SlideController,
     CategoryAttributeController,
-    AttributeController
+    AttributeController,
+    PostController,
+    PostCategoryController
 };
 use Illuminate\Support\Facades\Route;
 
@@ -45,6 +48,11 @@ Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
 });
+
+// Blog routes
+Route::get('/blog', [BlogController::class, 'index'])->name('blog.index');
+Route::get('/blog/{post:slug}', [BlogController::class, 'show'])->name('blog.show');
+Route::get('/blog/category/{category:slug}', [BlogController::class, 'category'])->name('blog.category');
 
 // Admin Routes
 Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(function () {
@@ -76,6 +84,11 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(fun
     Route::resource('attributes', AttributeController::class);
     Route::get('/categories/{category}/attributes', [CategoryAttributeController::class, 'getAttributes'])
         ->name('categories.attributes');
+
+    // Posts
+    Route::resource('posts', PostController::class);
+    Route::resource('post-categories', PostCategoryController::class);
+    Route::post('posts/upload-image', [PostController::class, 'uploadImage'])->name('posts.upload-image');
 });
 
 require __DIR__.'/auth.php';

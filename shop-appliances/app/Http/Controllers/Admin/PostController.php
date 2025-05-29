@@ -4,6 +4,8 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Post;
+use App\Models\PostCategory;
+use App\Models\Product;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Storage;
@@ -12,78 +14,109 @@ class PostController extends Controller
 {
     public function index()
     {
-        $posts = Post::latest()->paginate(10);
+        $posts = Post::with(['category', 'author'])
+            ->latest()
+            ->paginate(10);
+
         return view('admin.posts.index', compact('posts'));
     }
 
     public function create()
     {
-        return view('admin.posts.create');
+        $categories = PostCategory::all();
+        $products = Product::all();
+        return view('admin.posts.create', compact('categories', 'products'));
     }
 
     public function store(Request $request)
     {
-        $request->validate([
-            'title' => 'required|unique:posts',
+        $validated = $request->validate([
+            'title' => 'required|max:255',
             'content' => 'required',
-            'image' => 'required|image|mimes:jpeg,png,jpg|max:2048'
+            'excerpt' => 'nullable',
+            'featured_image' => 'nullable|image|max:2048',
+            'status' => 'required|in:draft,published',
+            'category_id' => 'required|exists:post_categories,id',
+            'product_id' => 'nullable|exists:products,id',
+            'published_at' => 'nullable|date',
+            'meta_title' => 'nullable|max:255',
+            'meta_description' => 'nullable'
         ]);
 
-        $image = $request->file('image');
-        $imageName = time() . '.' . $image->extension();
-        $image->storeAs('public/posts', $imageName);
+        $validated['slug'] = Str::slug($request->title);
+        $validated['user_id'] = auth()->id();
 
-        Post::create([
-            'title' => $request->title,
-            'slug' => Str::slug($request->title),
-            'content' => $request->content,
-            'image' => $imageName,
-            'is_active' => $request->has('is_active')
-        ]);
+        if ($request->hasFile('featured_image')) {
+            $validated['featured_image'] = $request->file('featured_image')
+                ->store('posts', 'public');
+        }
+
+        Post::create($validated);
 
         return redirect()->route('admin.posts.index')
-                        ->with('success', 'Post created successfully');
+            ->with('success', 'Bài viết đã được tạo thành công.');
     }
 
     public function edit(Post $post)
     {
-        return view('admin.posts.edit', compact('post'));
+        $categories = PostCategory::all();
+        $products = Product::all();
+        return view('admin.posts.edit', compact('post', 'categories', 'products'));
     }
 
     public function update(Request $request, Post $post)
     {
-        $request->validate([
-            'title' => 'required|unique:posts,title,' . $post->id,
+        $validated = $request->validate([
+            'title' => 'required|max:255',
             'content' => 'required',
-            'image' => 'nullable|image|mimes:jpeg,png,jpg|max:2048'
+            'excerpt' => 'nullable',
+            'featured_image' => 'nullable|image|max:2048',
+            'status' => 'required|in:draft,published',
+            'category_id' => 'required|exists:post_categories,id',
+            'product_id' => 'nullable|exists:products,id',
+            'published_at' => 'nullable|date',
+            'meta_title' => 'nullable|max:255',
+            'meta_description' => 'nullable'
         ]);
 
-        if ($request->hasFile('image')) {
-            Storage::delete('public/posts/' . $post->image);
-            
-            $image = $request->file('image');
-            $imageName = time() . '.' . $image->extension();
-            $image->storeAs('public/posts', $imageName);
+        $validated['slug'] = Str::slug($request->title);
+
+        if ($request->hasFile('featured_image')) {
+            // Xóa ảnh cũ nếu có
+            if ($post->featured_image) {
+                Storage::disk('public')->delete($post->featured_image);
+            }
+            $validated['featured_image'] = $request->file('featured_image')
+                ->store('posts', 'public');
         }
 
-        $post->update([
-            'title' => $request->title,
-            'slug' => Str::slug($request->title),
-            'content' => $request->content,
-            'image' => $request->hasFile('image') ? $imageName : $post->image,
-            'is_active' => $request->has('is_active')
-        ]);
+        $post->update($validated);
 
         return redirect()->route('admin.posts.index')
-                        ->with('success', 'Post updated successfully');
+            ->with('success', 'Bài viết đã được cập nhật thành công.');
     }
 
     public function destroy(Post $post)
     {
-        Storage::delete('public/posts/' . $post->image);
-        $post->delete();
+        if ($post->featured_image) {
+            Storage::disk('public')->delete($post->featured_image);
+        }
         
+        $post->delete();
+
         return redirect()->route('admin.posts.index')
-                        ->with('success', 'Post deleted successfully');
+            ->with('success', 'Bài viết đã được xóa thành công.');
+    }
+
+    public function uploadImage(Request $request)
+    {
+        if ($request->hasFile('upload')) {
+            $file = $request->file('upload');
+            $path = $file->store('posts/editor', 'public');
+            
+            return response()->json([
+                'url' => Storage::url($path)
+            ]);
+        }
     }
 } 

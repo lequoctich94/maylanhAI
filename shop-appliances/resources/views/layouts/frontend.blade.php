@@ -253,6 +253,9 @@
                         <li class="nav-item">
                             <a class="nav-link text-white" href="{{ route('products.index') }}">Sản Phẩm</a>
                         </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-white" href="{{ route('blog.index') }}">Blog</a>
+                        </li>
                         
                         <!-- Thêm form tìm kiếm -->
                         <li class="nav-item">

@@ -135,6 +135,34 @@
                             <span>Attributes</span>
                         </a>
                     </li>
+                    <li class="nav-item">
+                        <a class="nav-link dropdown-toggle {{ request()->routeIs('admin.posts.*') || request()->routeIs('admin.post-categories.*') ? 'active' : '' }}" 
+                           href="#blogSubmenu" 
+                           data-bs-toggle="collapse" 
+                           role="button" 
+                           aria-expanded="{{ request()->routeIs('admin.posts.*') || request()->routeIs('admin.post-categories.*') ? 'true' : 'false' }}">
+                            <i class="fas fa-blog"></i>
+                            <span>Blog Management</span>
+                        </a>
+                        <div class="collapse {{ request()->routeIs('admin.posts.*') || request()->routeIs('admin.post-categories.*') ? 'show' : '' }}" id="blogSubmenu">
+                            <ul class="nav flex-column ms-3">
+                                <li class="nav-item">
+                                    <a class="nav-link {{ request()->routeIs('admin.posts.*') ? 'active' : '' }}" 
+                                       href="{{ route('admin.posts.index') }}">
+                                        <i class="fas fa-newspaper"></i>
+                                        <span>Posts</span>
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link {{ request()->routeIs('admin.post-categories.*') ? 'active' : '' }}" 
+                                       href="{{ route('admin.post-categories.index') }}">
+                                        <i class="fas fa-folder"></i>
+                                        <span>Categories</span>
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                    </li>
                     <li class="nav-item mt-4">
                         <a class="nav-link" href="{{ route('home') }}" target="_blank">
                             <i class="fas fa-external-link-alt"></i>
