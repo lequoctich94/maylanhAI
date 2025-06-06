@@ -109,6 +109,25 @@
                                         {{ $product->name }}
                                     </a>
                                 </h6>
+                                
+                                <!-- Highlight Attributes -->
+                                @if($product->attributes->where('attribute.is_highlight', true)->count() > 0)
+                                    <div class="highlight-attributes mb-2">
+                                        @foreach($product->attributes->where('attribute.is_highlight', true) as $productAttribute)
+                                            @if($productAttribute->value && !($productAttribute->attribute->type === 'checkbox' && $productAttribute->value !== '1'))
+                                                <span class="badge highlight-badge" 
+                                                      style="background-color: {{ $productAttribute->attribute->highlight_color ?? '#007bff' }};">
+                                                    @if($productAttribute->attribute->type === 'checkbox')
+                                                        Có {{ $productAttribute->attribute->name }}
+                                                    @else
+                                                        {{ $productAttribute->attribute->name }}: {{ $productAttribute->value }}
+                                                    @endif
+                                                </span>
+                                            @endif
+                                        @endforeach
+                                    </div>
+                                @endif
+                                
                                 <div class="product-price mb-3">
                                     <div class="price-label text-danger mb-1">Giá rẻ quá!</div>
                                     @if($product->discount_price)
@@ -448,6 +467,22 @@
 .cart-notification.show {
     opacity: 1;
     transform: scale(1);
+}
+
+.highlight-attributes {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 4px;
+}
+
+.highlight-badge {
+    font-size: 0.75rem;
+    padding: 3px 8px;
+    border-radius: 12px;
+    color: white !important;
+    font-weight: 500;
+    text-shadow: 0 1px 2px rgba(0,0,0,0.2);
+    border: none;
 }
 
 @keyframes bounce {

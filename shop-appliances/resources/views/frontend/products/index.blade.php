@@ -55,6 +55,25 @@
                                  alt="{{ $product->name }}">
                             <div class="card-body">
                                 <h5 class="card-title">{{ $product->name }}</h5>
+                                
+                                <!-- Highlight Attributes -->
+                                @if($product->attributes->where('attribute.is_highlight', true)->count() > 0)
+                                    <div class="highlight-attributes mb-2">
+                                        @foreach($product->attributes->where('attribute.is_highlight', true) as $productAttribute)
+                                            @if($productAttribute->value && !($productAttribute->attribute->type === 'checkbox' && $productAttribute->value !== '1'))
+                                                <span class="badge highlight-badge" 
+                                                      style="background-color: {{ $productAttribute->attribute->highlight_color ?? '#007bff' }};">
+                                                    @if($productAttribute->attribute->type === 'checkbox')
+                                                        Có {{ $productAttribute->attribute->name }}
+                                                    @else
+                                                        {{ $productAttribute->attribute->name }}: {{ $productAttribute->value }}
+                                                    @endif
+                                                </span>
+                                            @endif
+                                        @endforeach
+                                    </div>
+                                @endif
+                                
                                 <p class="card-text">{{ Str::limit($product->description, 100) }}</p>
                                 <div class="d-flex justify-content-between align-items-center">
                                     <div>
@@ -102,4 +121,24 @@
             </div>
         </div>
     </div>
-@endsection 
+@endsection
+
+@push('styles')
+<style>
+.highlight-attributes {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 4px;
+}
+
+.highlight-badge {
+    font-size: 0.75rem;
+    padding: 3px 8px;
+    border-radius: 12px;
+    color: white !important;
+    font-weight: 500;
+    text-shadow: 0 1px 2px rgba(0,0,0,0.2);
+    border: none;
+}
+</style>
+@endpush 

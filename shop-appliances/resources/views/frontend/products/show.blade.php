@@ -68,7 +68,13 @@
                             @if($productAttribute->value)
                                 <tr>
                                     <td>{{ $productAttribute->attribute->name }}:</td>
-                                    <td>{{ $productAttribute->value }}</td>
+                                    <td>
+                                        @if($productAttribute->attribute->type === 'checkbox')
+                                            {{ $productAttribute->value === '1' ? 'Có' : 'Không' }}
+                                        @else
+                                            {{ $productAttribute->value }}
+                                        @endif
+                                    </td>
                                 </tr>
                             @endif
                         @endforeach

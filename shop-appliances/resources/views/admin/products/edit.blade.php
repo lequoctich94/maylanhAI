@@ -155,6 +155,21 @@ document.getElementById('category_id').addEventListener('change', function() {
                                 `).join('')}
                             </select>
                         `;
+                    } else if (attr.type === 'checkbox') {
+                        // Create checkbox for checkbox type
+                        inputHtml = `
+                            <div class="form-check">
+                                <input type="checkbox" 
+                                       class="form-check-input @error('attributes.${attr.id}') is-invalid @enderror"
+                                       id="attr_${attr.id}" 
+                                       name="attributes[${attr.id}]"
+                                       value="1"
+                                       ${existingValue === '1' ? 'checked' : ''}>
+                                <label class="form-check-label" for="attr_${attr.id}">
+                                    ${attr.name}
+                                </label>
+                            </div>
+                        `;
                     } else {
                         // Create regular input for other types
                         inputHtml = `
@@ -168,7 +183,7 @@ document.getElementById('category_id').addEventListener('change', function() {
                     }
 
                     div.innerHTML = `
-                        <label for="attr_${attr.id}" class="form-label">${attr.name}</label>
+                        ${attr.type === 'checkbox' ? '' : `<label for="attr_${attr.id}" class="form-label">${attr.name}</label>`}
                         ${inputHtml}
                         @error('attributes.${attr.id}')
                             <div class="invalid-feedback">{{ $message }}</div>

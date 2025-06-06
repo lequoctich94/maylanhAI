@@ -12,7 +12,7 @@ class ProductController extends Controller
     {
         $categories = Category::active()->withCount('products')->get();
         $products = Product::active()
-            ->with('category')
+            ->with(['category', 'attributes.attribute'])
             ->when(request('sort'), function($query) {
                 switch(request('sort')) {
                     case 'price_asc':
@@ -56,6 +56,7 @@ class ProductController extends Controller
         
         $products = $category->products()
             ->active()
+            ->with(['attributes.attribute'])
             ->when(request('search'), function($query) {
                 $query->where('name', 'like', '%' . request('search') . '%');
             })

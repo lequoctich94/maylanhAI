@@ -25,8 +25,10 @@ class AttributeController extends Controller
     {
         $request->validate([
             'name' => 'required|string|max:255',
-            'type' => 'required|in:text,number,select',
+            'type' => 'required|in:text,number,select,checkbox',
             'is_required' => 'boolean',
+            'is_highlight' => 'boolean',
+            'highlight_color' => 'nullable|string|in:red,blue,green,yellow,orange,purple,pink',
             'categories' => 'array',
             'options' => 'required_if:type,select|array'
         ]);
@@ -35,6 +37,8 @@ class AttributeController extends Controller
             'name' => $request->name,
             'type' => $request->type,
             'is_required' => $request->boolean('is_required'),
+            'is_highlight' => $request->boolean('is_highlight'),
+            'highlight_color' => $request->highlight_color,
             'is_active' => true,
             'options' => $request->type === 'select' ? $request->options : null
         ]);
@@ -57,8 +61,10 @@ class AttributeController extends Controller
     {
         $request->validate([
             'name' => 'required|string|max:255',
-            'type' => 'required|in:text,number,select',
+            'type' => 'required|in:text,number,select,checkbox',
             'is_required' => 'boolean',
+            'is_highlight' => 'boolean',
+            'highlight_color' => 'nullable|string|in:red,blue,green,yellow,orange,purple,pink',
             'categories' => 'array',
             'options' => 'required_if:type,select|array'
         ]);
@@ -67,6 +73,8 @@ class AttributeController extends Controller
             'name' => $request->name,
             'type' => $request->type,
             'is_required' => $request->boolean('is_required'),
+            'is_highlight' => $request->boolean('is_highlight'),
+            'highlight_color' => $request->highlight_color,
             'options' => $request->type === 'select' ? $request->options : null
         ]);
 

@@ -29,6 +29,7 @@
                         <option value="text" {{ old('type') == 'text' ? 'selected' : '' }}>Text</option>
                         <option value="number" {{ old('type') == 'number' ? 'selected' : '' }}>Number</option>
                         <option value="select" {{ old('type') == 'select' ? 'selected' : '' }}>Select</option>
+                        <option value="checkbox" {{ old('type') == 'checkbox' ? 'selected' : '' }}>Checkbox</option>
                     </select>
                     @error('type')
                         <div class="invalid-feedback">{{ $message }}</div>
@@ -56,6 +57,33 @@
                                {{ old('is_required') ? 'checked' : '' }}>
                         <label class="form-check-label" for="is_required">Required</label>
                     </div>
+                </div>
+
+                <div class="mb-3">
+                    <div class="form-check">
+                        <input type="checkbox" class="form-check-input" 
+                               id="is_highlight" name="is_highlight" value="1" 
+                               {{ old('is_highlight') ? 'checked' : '' }}>
+                        <label class="form-check-label" for="is_highlight">Highlight</label>
+                    </div>
+                </div>
+
+                <div class="mb-3" id="highlight-color-container" style="display: none;">
+                    <label for="highlight_color" class="form-label">Highlight Color</label>
+                    <select class="form-select @error('highlight_color') is-invalid @enderror" 
+                            id="highlight_color" name="highlight_color">
+                        <option value="">Select Color</option>
+                        <option value="red" {{ old('highlight_color') == 'red' ? 'selected' : '' }}>Red</option>
+                        <option value="blue" {{ old('highlight_color') == 'blue' ? 'selected' : '' }}>Blue</option>
+                        <option value="green" {{ old('highlight_color') == 'green' ? 'selected' : '' }}>Green</option>
+                        <option value="yellow" {{ old('highlight_color') == 'yellow' ? 'selected' : '' }}>Yellow</option>
+                        <option value="orange" {{ old('highlight_color') == 'orange' ? 'selected' : '' }}>Orange</option>
+                        <option value="purple" {{ old('highlight_color') == 'purple' ? 'selected' : '' }}>Purple</option>
+                        <option value="pink" {{ old('highlight_color') == 'pink' ? 'selected' : '' }}>Pink</option>
+                    </select>
+                    @error('highlight_color')
+                        <div class="invalid-feedback">{{ $message }}</div>
+                    @enderror
                 </div>
 
                 <div class="mb-3">
@@ -94,10 +122,17 @@ document.addEventListener('DOMContentLoaded', function() {
     const optionsContainer = document.getElementById('options-container');
     const optionsList = document.getElementById('options-list');
     const addOptionBtn = document.getElementById('add-option');
+    const highlightCheckbox = document.getElementById('is_highlight');
+    const highlightColorContainer = document.getElementById('highlight-color-container');
 
     // Show/hide options based on type selection
     typeSelect.addEventListener('change', function() {
         optionsContainer.style.display = this.value === 'select' ? 'block' : 'none';
+    });
+
+    // Show/hide highlight color based on highlight checkbox
+    highlightCheckbox.addEventListener('change', function() {
+        highlightColorContainer.style.display = this.checked ? 'block' : 'none';
     });
 
     // Add new option
@@ -121,6 +156,11 @@ document.addEventListener('DOMContentLoaded', function() {
     // Show options container if type is select on page load
     if (typeSelect.value === 'select') {
         optionsContainer.style.display = 'block';
+    }
+
+    // Show highlight color container if highlight is checked on page load
+    if (highlightCheckbox.checked) {
+        highlightColorContainer.style.display = 'block';
     }
 });
 </script>

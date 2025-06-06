@@ -14,7 +14,7 @@ class SearchController extends Controller
         $categories = Category::active()->withCount('products')->get();
         
         $products = Product::active()
-            ->with('category')
+            ->with(['category', 'attributes.attribute'])
             ->when($query, function($q) use ($query) {
                 $q->where(function($q) use ($query) {
                     $q->where('name', 'like', '%' . $query . '%')

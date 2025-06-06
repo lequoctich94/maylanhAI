@@ -20,6 +20,7 @@
                             <th>Name</th>
                             <th>Type</th>
                             <th>Required</th>
+                            <th>Highlight</th>
                             <th>Categories</th>
                             <th>Status</th>
                             <th>Actions</th>
@@ -34,6 +35,16 @@
                                 <td>
                                     @if($attribute->is_required)
                                         <span class="badge bg-success">Yes</span>
+                                    @else
+                                        <span class="badge bg-secondary">No</span>
+                                    @endif
+                                </td>
+                                <td>
+                                    @if($attribute->is_highlight)
+                                        <span class="badge bg-success">Yes</span>
+                                        @if($attribute->highlight_color)
+                                            <br><small class="text-muted">Color: {{ ucfirst($attribute->highlight_color) }}</small>
+                                        @endif
                                     @else
                                         <span class="badge bg-secondary">No</span>
                                     @endif
@@ -69,7 +80,7 @@
                             </tr>
                         @empty
                             <tr>
-                                <td colspan="7" class="text-center">No attributes found</td>
+                                <td colspan="8" class="text-center">No attributes found</td>
                             </tr>
                         @endforelse
                     </tbody>

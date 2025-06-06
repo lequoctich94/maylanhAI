@@ -11,12 +11,15 @@ class Attribute extends Model
         'type', 
         'is_required', 
         'is_active',
-        'options'
+        'options',
+        'is_highlight',
+        'highlight_color'
     ];
 
     protected $casts = [
         'is_required' => 'boolean',
         'is_active' => 'boolean',
+        'is_highlight' => 'boolean',
         'options' => 'array'
     ];
 
