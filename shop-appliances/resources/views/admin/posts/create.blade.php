@@ -133,7 +133,15 @@
 <script src="https://cdn.ckeditor.com/ckeditor5/27.1.0/classic/ckeditor.js"></script>
 <script>
     ClassicEditor
-        .create(document.querySelector('#content'))
+        .create(document.querySelector('#content'), {
+            ckfinder: {
+                uploadUrl: '{{ route('admin.posts.upload-image') }}',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                }
+            }
+        })
         .catch(error => {
             console.error(error);
         });

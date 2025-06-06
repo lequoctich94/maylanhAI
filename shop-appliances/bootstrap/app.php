@@ -25,7 +25,11 @@ return Application::configure(basePath: dirname(__DIR__))
         $middleware->api(append: [
             // Thêm middleware nếu cần
         ]);
+        //
+        $middleware->validateCsrfTokens(except: [
+            '/admin/posts/upload-image',
+        ]);
     })
     ->withExceptions(function (Exceptions $exceptions) {
-        //
+        
     })->create();

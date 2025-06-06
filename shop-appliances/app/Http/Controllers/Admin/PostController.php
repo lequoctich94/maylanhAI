@@ -115,8 +115,17 @@ class PostController extends Controller
             $path = $file->store('posts/editor', 'public');
             
             return response()->json([
+                'uploaded' => true,
+                'fileName' => basename($path),
                 'url' => Storage::url($path)
             ]);
         }
+
+        return response()->json([
+            'uploaded' => false,
+            'error' => [
+                'message' => 'Could not upload the file'
+            ]
+        ], 400);
     }
 } 

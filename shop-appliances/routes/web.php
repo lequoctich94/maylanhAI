@@ -89,6 +89,8 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(fun
     Route::resource('posts', PostController::class);
     Route::resource('post-categories', PostCategoryController::class);
     Route::post('posts/upload-image', [PostController::class, 'uploadImage'])->name('posts.upload-image');
+    
+    Route::post('admin/posts/upload-image', [PostController::class, 'uploadImage'])->name('admin.posts.upload-image');
 });
 
 require __DIR__.'/auth.php';
