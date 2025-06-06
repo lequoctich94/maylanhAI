@@ -26,7 +26,7 @@ class SlideController extends Controller
             'title' => 'required|max:255',
             'image' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048',
             'order' => 'required|integer|min:1',
-            'status' => 'required|boolean',
+            'is_active' => 'required|boolean',
             'url' => 'nullable|url|max:255',
         ]);
 
@@ -40,7 +40,7 @@ class SlideController extends Controller
             'description' => $request->description,
             'image' => $path ?? null,
             'order' => $request->order,
-            'status' => $request->status,
+            'is_active' => $request->is_active,
             'url' => $request->url,
         ]);
 
@@ -59,7 +59,7 @@ class SlideController extends Controller
             'title' => 'required|max:255',
             'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
             'order' => 'required|integer|min:1',
-            'status' => 'required|boolean',
+            'is_active' => 'required|boolean',
             'url' => 'nullable|url|max:255',
         ]);
 
@@ -78,7 +78,7 @@ class SlideController extends Controller
             'title' => $request->title,
             'description' => $request->description,
             'order' => $request->order,
-            'status' => $request->status,
+            'is_active' => $request->is_active,
             'url' => $request->url,
         ]);
 

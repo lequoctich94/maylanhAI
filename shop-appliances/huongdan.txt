@@ -1,0 +1,18 @@
+Banner
+
+TỐI ƯU NHẤT: 2560x1440px2560x1440px (2K) - Tỷ lệ 16:9
+✅ TỐT: 1920x1080px (Full HD) - Tỷ lệ 16:9
+⭐ TUYỆT VỜI: 3840x2160px (4K) - Cho màn hình cao cấp
+📱 ULTRAWIDE: 2560x1080px - Cho màn hình siêu rộng
+
+
+1. Cool Blue (Mặc định):
+Primary: #2A83E9 (Brand Blue chính)
+Secondary: #1565C0 (Dark Blue)
+Accent: #42A5F5 (Light Blue)
+Background: Gradient từ #e3f2fd đến #bbdefb
+
+
+
+
+trang wbe làm banner: https://www.freepik.com/pikaso/ai-image-generator?from_element=freepik_autocomplete

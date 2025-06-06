@@ -95,14 +95,14 @@
                 </div>
 
                 <div class="mb-3">
-                    <label for="status" class="form-label">Trạng thái</label>
-                    <select class="form-select @error('status') is-invalid @enderror" 
-                            id="status" 
-                            name="status">
-                        <option value="1" {{ old('status', $slide->status) == 1 ? 'selected' : '' }}>Hiện</option>
-                        <option value="0" {{ old('status', $slide->status) == 0 ? 'selected' : '' }}>Ẩn</option>
+                    <label for="is_active" class="form-label">Trạng thái</label>
+                    <select class="form-select @error('is_active') is-invalid @enderror" 
+                            id="is_active" 
+                            name="is_active">
+                        <option value="1" {{ old('is_active', $slide->is_active) == 1 ? 'selected' : '' }}>Hiện</option>
+                        <option value="0" {{ old('is_active', $slide->is_active) == 0 ? 'selected' : '' }}>Ẩn</option>
                     </select>
-                    @error('status')
+                    @error('is_active')
                         <div class="invalid-feedback">{{ $message }}</div>
                     @enderror
                 </div>

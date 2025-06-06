@@ -18,7 +18,7 @@ class HomeController extends Controller
             ->latest()
             ->take(8)
             ->get();
-
+        //dd($slides);
         return view('frontend.home', compact('slides', 'categories', 'products'));
     }
 } 
