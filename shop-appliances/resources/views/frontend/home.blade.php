@@ -3,130 +3,133 @@
 @section('title', 'Home')
 
 @section('content')
-<!-- Full-Screen Modern Hero Slider -->
-<div id="heroCarousel" class="carousel slide hero-slider" data-bs-ride="carousel" data-bs-interval="5000">
-    <!-- Custom Indicators -->
-    <div class="hero-indicators">
-            @foreach($slides as $key => $slide)
-        <button type="button" data-bs-target="#heroCarousel" data-bs-slide-to="{{ $key }}" 
-            class="hero-indicator {{ $key == 0 ? 'active' : '' }}" 
-            aria-current="true" aria-label="Slide {{ $key + 1 }}">
-            <span class="indicator-line"></span>
-            <span class="indicator-text">0{{ $key + 1 }}</span>
-            </button>
-            @endforeach
-        </div>
-        
-    <!-- Slides Container -->
-    <div class="carousel-inner hero-inner">
-            @foreach($slides as $key => $slide)
-        <div class="carousel-item hero-slide {{ $key == 0 ? 'active' : '' }}">
-            <!-- Background with Parallax Effect -->
-            <div class="hero-background" data-bg="{{ asset('storage/' . $slide->image) }}">
-                <div class="hero-image-container">
-                    <img src="{{ asset('storage/' . $slide->image) }}" 
-                         class="hero-image" 
-                         alt="{{ $slide->title }}">
-                </div>
-                <!-- Animated Overlay -->
-                <div class="hero-overlay-animated"></div>
-                <!-- Gradient Overlay -->
-                <div class="hero-gradient-overlay">
-                    <div class="hero-particles">
-                        <div class="particle"></div>
-                        <div class="particle"></div>
-                        <div class="particle"></div>
-                        <div class="particle"></div>
-                        <div class="particle"></div>
+<!-- Hero Slider Wrapper to prevent horizontal scroll -->
+<div class="hero-slider-wrapper">
+    <!-- Full-Screen Modern Hero Slider -->
+    <div id="heroCarousel" class="carousel slide hero-slider" data-bs-ride="carousel" data-bs-interval="5000">
+        <!-- Custom Indicators -->
+        <div class="hero-indicators">
+                @foreach($slides as $key => $slide)
+            <button type="button" data-bs-target="#heroCarousel" data-bs-slide-to="{{ $key }}" 
+                class="hero-indicator {{ $key == 0 ? 'active' : '' }}" 
+                aria-current="true" aria-label="Slide {{ $key + 1 }}">
+                <span class="indicator-line"></span>
+                <span class="indicator-text">0{{ $key + 1 }}</span>
+                </button>
+                @endforeach
+            </div>
+            
+        <!-- Slides Container -->
+        <div class="carousel-inner hero-inner">
+                @foreach($slides as $key => $slide)
+            <div class="carousel-item hero-slide {{ $key == 0 ? 'active' : '' }}">
+                <!-- Background with Parallax Effect -->
+                <div class="hero-background" data-bg="{{ asset('storage/' . $slide->image) }}">
+                    <div class="hero-image-container">
+                        <img src="{{ asset('storage/' . $slide->image) }}" 
+                             class="hero-image" 
+                             alt="{{ $slide->title }}">
+                    </div>
+                    <!-- Animated Overlay -->
+                    <div class="hero-overlay-animated"></div>
+                    <!-- Gradient Overlay -->
+                    <div class="hero-gradient-overlay">
+                        <div class="hero-particles">
+                            <div class="particle"></div>
+                            <div class="particle"></div>
+                            <div class="particle"></div>
+                            <div class="particle"></div>
+                            <div class="particle"></div>
+                        </div>
                     </div>
                 </div>
-            </div>
 
-            <!-- Content Container -->
-            <div class="hero-content-wrapper">
-                <div class="container">
-                    <div class="row align-items-center min-vh-100">
-                        <div class="col-lg-8 col-xl-7">
-                            <div class="hero-content-inner">
-                                <!-- Badge -->
-                                <div class="hero-badge">
-                                    <span class="badge-icon">✨</span>
-                                    <span class="badge-text">Chào mừng đến với MayLanhAI</span>
-                                </div>
-                                
-                                <!-- Main Title -->
-                                <h1 class="hero-main-title">
-                                    <span class="title-line title-line-1">{{ explode(' ', $slide->title)[0] ?? '' }}</span>
-                                    <span class="title-line title-line-2">{{ implode(' ', array_slice(explode(' ', $slide->title), 1)) }}</span>
-                                </h1>
-                                
-                                <!-- Subtitle -->
-                                <p class="hero-description">{{ $slide->subtitle }}</p>
-                                
-                                <!-- CTA Buttons -->
-                    @if($slide->link)
-                                <div class="hero-cta-group">
-                                    <a href="{{ $slide->link }}" class="btn btn-hero-primary">
-                                        <span class="btn-text">Khám Phá Ngay</span>
-                                        <span class="btn-icon">
-                                            <i class="fas fa-arrow-right"></i>
-                                        </span>
-                                        <div class="btn-ripple"></div>
-                                    </a>
-                                    <a href="#featured-products" class="btn btn-hero-secondary">
-                                        <span class="btn-text">Xem Sản Phẩm</span>
-                                        <span class="btn-icon">
-                                            <i class="fas fa-play"></i>
-                                        </span>
-                                    </a>
-                                </div>
-                    @endif
-                                
-                                <!-- Stats/Features Quick Info -->
-                                <div class="hero-stats">
-                                    <div class="stat-item">
-                                        <div class="stat-number">1000+</div>
-                                        <div class="stat-label">Khách hàng</div>
+                <!-- Content Container -->
+                <div class="hero-content-wrapper">
+                    <div class="container">
+                        <div class="row align-items-center min-vh-100">
+                            <div class="col-lg-8 col-xl-7">
+                                <div class="hero-content-inner">
+                                    <!-- Badge -->
+                                    <div class="hero-badge">
+                                        <span class="badge-icon">✨</span>
+                                        <span class="badge-text">Chào mừng đến với MayLanhAI</span>
                                     </div>
-                                    <div class="stat-item">
-                                        <div class="stat-number">50+</div>
-                                        <div class="stat-label">Sản phẩm</div>
+                                    
+                                    <!-- Main Title -->
+                                    <h1 class="hero-main-title">
+                                        <span class="title-line title-line-1">{{ explode(' ', $slide->title)[0] ?? '' }}</span>
+                                        <span class="title-line title-line-2">{{ implode(' ', array_slice(explode(' ', $slide->title), 1)) }}</span>
+                                    </h1>
+                                    
+                                    <!-- Subtitle -->
+                                    <p class="hero-description">{{ $slide->subtitle }}</p>
+                                    
+                                    <!-- CTA Buttons -->
+                        @if($slide->link)
+                                    <div class="hero-cta-group">
+                                        <a href="{{ $slide->link }}" class="btn btn-hero-primary">
+                                            <span class="btn-text">Khám Phá Ngay</span>
+                                            <span class="btn-icon">
+                                                <i class="fas fa-arrow-right"></i>
+                                            </span>
+                                            <div class="btn-ripple"></div>
+                                        </a>
+                                        <a href="#featured-products" class="btn btn-hero-secondary">
+                                            <span class="btn-text">Xem Sản Phẩm</span>
+                                            <span class="btn-icon">
+                                                <i class="fas fa-play"></i>
+                                            </span>
+                                        </a>
                                     </div>
-                                    <div class="stat-item">
-                                        <div class="stat-number">24/7</div>
-                                        <div class="stat-label">Hỗ trợ</div>
+                        @endif
+                                    
+                                    <!-- Stats/Features Quick Info -->
+                                    <div class="hero-stats">
+                                        <div class="stat-item">
+                                            <div class="stat-number">1000+</div>
+                                            <div class="stat-label">Khách hàng</div>
+                                        </div>
+                                        <div class="stat-item">
+                                            <div class="stat-number">50+</div>
+                                            <div class="stat-label">Sản phẩm</div>
+                                        </div>
+                                        <div class="stat-item">
+                                            <div class="stat-number">24/7</div>
+                                            <div class="stat-label">Hỗ trợ</div>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
                     </div>
+                    </div>
                 </div>
-                </div>
+                @endforeach
             </div>
-            @endforeach
+
+        <!-- Custom Navigation Controls -->
+        <div class="hero-navigation">
+            <button class="hero-nav-btn hero-prev" type="button" data-bs-target="#heroCarousel" data-bs-slide="prev">
+                <span class="nav-icon">
+                    <i class="fas fa-chevron-left"></i>
+                </span>
+                <span class="nav-text">Prev</span>
+            </button>
+            <button class="hero-nav-btn hero-next" type="button" data-bs-target="#heroCarousel" data-bs-slide="next">
+                <span class="nav-text">Next</span>
+                <span class="nav-icon">
+                    <i class="fas fa-chevron-right"></i>
+                </span>
+            </button>
         </div>
 
-    <!-- Custom Navigation Controls -->
-    <div class="hero-navigation">
-        <button class="hero-nav-btn hero-prev" type="button" data-bs-target="#heroCarousel" data-bs-slide="prev">
-            <span class="nav-icon">
-                <i class="fas fa-chevron-left"></i>
-            </span>
-            <span class="nav-text">Prev</span>
-        </button>
-        <button class="hero-nav-btn hero-next" type="button" data-bs-target="#heroCarousel" data-bs-slide="next">
-            <span class="nav-text">Next</span>
-            <span class="nav-icon">
-                <i class="fas fa-chevron-right"></i>
-            </span>
-        </button>
-    </div>
-
-    <!-- Scroll Down Indicator -->
-    <div class="scroll-indicator">
-        <div class="scroll-text">Scroll Down</div>
-        <div class="scroll-arrow">
-            <i class="fas fa-chevron-down"></i>
+        <!-- Scroll Down Indicator -->
+        <div class="scroll-indicator">
+            <div class="scroll-text">Scroll Down</div>
+            <div class="scroll-arrow">
+                <i class="fas fa-chevron-down"></i>
+            </div>
         </div>
     </div>
 </div>
@@ -459,6 +462,17 @@
 
 @push('styles')
 <style>
+/* ===== FIX HORIZONTAL SCROLL ===== */
+html, body {
+    overflow-x: hidden;
+    max-width: 100%;
+    box-sizing: border-box;
+}
+
+*, *::before, *::after {
+    box-sizing: border-box;
+}
+
 /* ===== FULL SCREEN HERO SLIDER ===== */
 .hero-slider {
     position: relative;
@@ -466,9 +480,28 @@
     height: 100vh;
     z-index: 100;
     margin: 0;
+    margin-left: calc(-50vw + 50%);
     overflow: hidden;
     background: #000;
-    margin-left: calc(-50vw + 50%);
+}
+
+/* Container wrapper to prevent overflow */
+.hero-slider-wrapper {
+    position: relative;
+    width: 100%;
+    overflow: hidden;
+}
+
+.container, .container-fluid {
+    max-width: 100%;
+    overflow-x: hidden;
+}
+
+/* Ensure no elements exceed viewport width */
+.row {
+    margin-left: 0;
+    margin-right: 0;
+    max-width: 100%;
 }
 
 .hero-inner {

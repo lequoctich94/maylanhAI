@@ -10,6 +10,22 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     @stack('styles')
     <style>
+        /* ===== GLOBAL STYLES TO PREVENT HORIZONTAL SCROLL ===== */
+        html, body {
+            overflow-x: hidden;
+            max-width: 100%;
+            box-sizing: border-box;
+        }
+
+        *, *::before, *::after {
+            box-sizing: border-box;
+        }
+
+        .container, .container-fluid, .container-sm, .container-md, .container-lg, .container-xl, .container-xxl {
+            max-width: 100%;
+            overflow-x: hidden;
+        }
+
         .nav-item.dropdown .dropdown-toggle::after {
             display: none; /* Ẩn mũi tên dropdown mặc định */
         }
