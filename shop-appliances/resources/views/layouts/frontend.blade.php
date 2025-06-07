@@ -751,8 +751,8 @@
     <footer class="footer-main">
         <!-- Main Footer Content -->
         <div class="footer-content">
-            <div class="container">
-                <div class="row">
+        <div class="container">
+            <div class="row">
                     <!-- Thông tin công ty -->
                     <div class="col-lg-4 col-md-6 mb-4">
                         <div class="footer-section">
@@ -897,8 +897,8 @@
                                 <p><a href="tel:0909123456">0909 123 456</a></p>
                             </div>
                         </div>
-                    </div>
-                    <div class="col-md-4">
+                </div>
+                <div class="col-md-4">
                         <div class="highlight-item">
                             <div class="highlight-icon">
                                 <i class="fas fa-shipping-fast"></i>

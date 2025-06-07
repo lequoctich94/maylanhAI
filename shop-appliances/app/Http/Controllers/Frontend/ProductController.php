@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Frontend;
 use App\Http\Controllers\Controller;
 use App\Models\Category;
 use App\Models\Product;
+use App\Models\Attribute;
 
 class ProductController extends Controller
 {
@@ -64,8 +65,16 @@ class ProductController extends Controller
                 foreach(request('attributes') as $attributeId => $value) {
                     if ($value) {
                         $query->whereHas('attributes', function($q) use ($attributeId, $value) {
-                            $q->where('attribute_id', $attributeId)
-                              ->where('value', 'like', '%' . $value . '%');
+                            $q->where('attribute_id', $attributeId);
+                            
+                            // For checkbox attributes, check for exact match (1 or 0)
+                            $attribute = Attribute::find($attributeId);
+                            if ($attribute && $attribute->type === 'checkbox') {
+                                $q->where('value', $value);
+                            } else {
+                                // For other types, use LIKE search
+                                $q->where('value', 'like', '%' . $value . '%');
+                            }
                         });
                     }
                 }
