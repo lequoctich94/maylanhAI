@@ -195,37 +195,29 @@
                 <div class="title-line"></div>
             </div>
                 </div>
-                <div class="row g-4">
+                <div class="row g-3">
                 @foreach($categories as $category)
-                        <div class="col-lg-3 col-md-4 col-sm-6">
-                            <div class="category-card modern-card">
-                                <div class="category-image-wrapper">
-                                @if($category->image)
-                                    <img src="{{ asset('storage/' . $category->image) }}" 
-                                             class="category-image" 
-                                         alt="{{ $category->name }}">
-                                @else
-                                        <div class="category-placeholder">
-                                            <i class="fas fa-image"></i>
-                                        </div>
-                                @endif
-                                <div class="category-overlay">
-                                        <div class="category-overlay-content">
-                                            <i class="fas fa-eye"></i>
-                                            <span>Xem Sản Phẩm</span>
+                        <div class="col-lg-2 col-md-4 col-sm-6">
+                            <a href="{{ route('products.category', $category->slug) }}" class="category-card-link">
+                                <div class="category-card-compact">
+                                    <div class="category-content-left">
+                                        <h6 class="category-name">{{ $category->name }}</h6>
+                                        <p class="category-description">{{ $category->products_count ?? 0 }} sản phẩm</p>
+                                    </div>
+                                    <div class="category-image-right">
+                                    @if($category->image)
+                                        <img src="{{ asset('storage/' . $category->image) }}" 
+                                                 class="category-image-compact" 
+                                             alt="{{ $category->name }}">
+                                    @else
+                                            <div class="category-placeholder-compact">
+                                                <i class="fas fa-box"></i>
+                                            </div>
+                                    @endif
+                                        <div class="category-badge">{{ $category->products_count ?? 0 }}</div>
+                                    </div>
                                 </div>
-                            </div>
-                                </div>
-                                <div class="category-content">
-                                    <h5 class="category-name">{{ $category->name }}</h5>
-                                    <p class="category-description">Khám phá ngay</p>
-                                    <a href="{{ route('products.category', $category->slug) }}" 
-                                       class="category-link">
-                                        <span>Xem thêm</span>
-                                        <i class="fas fa-arrow-right"></i>
-                                    </a>
-                            </div>
-                        </div>
+                            </a>
                     </div>
                 @endforeach
             </div>
@@ -786,12 +778,14 @@ body.hero-active .navbar {
     opacity: 0;
     transform: translateY(-100%);
     transition: all 0.3s ease;
-    width: 100%;
+    width: 100vw;
     left: 0;
     right: 0;
     position: fixed;
     margin: 0;
     padding: 0;
+    top: 0;
+    z-index: 9999;
 }
 
 body:not(.hero-active) .navbar {
@@ -801,7 +795,7 @@ body:not(.hero-active) .navbar {
     top: 0 !important;
     left: 0 !important;
     right: 0 !important;
-    width: 100% !important;
+    width: 100vw !important;
     z-index: 9999 !important;
     transition: all 0.3s ease;
     background: white;
@@ -813,7 +807,7 @@ body:not(.hero-active) .navbar {
 body.hero-active .navbar-fixed {
     opacity: 1;
     transform: translateY(0);
-    width: 100%;
+    width: 100vw;
     left: 0;
     right: 0;
     margin: 0;
@@ -821,7 +815,7 @@ body.hero-active .navbar-fixed {
 }
 
 .navbar {
-    width: 100%;
+    width: 100vw;
     left: 0;
     right: 0;
     position: fixed;
@@ -1216,6 +1210,46 @@ body.hero-active .navbar-fixed {
     background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
 }
 
+/* ===== CATEGORIES SECTION WITH BLUE BACKGROUND ===== */
+.categories-section {
+    background: linear-gradient(135deg, #2A83E9 0%, #1565C0 100%);
+    position: relative;
+    overflow: hidden;
+}
+
+.categories-section::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="pattern" x="0" y="0" width="20" height="20" patternUnits="userSpaceOnUse"><circle cx="10" cy="10" r="1" fill="rgba(255,255,255,0.1)"/></pattern></defs><rect width="100" height="100" fill="url(%23pattern)"/></svg>');
+    opacity: 0.3;
+    pointer-events: none;
+}
+
+.categories-section .section-title {
+    color: white !important;
+}
+
+.categories-section .title-highlight {
+    color: rgba(255, 255, 255, 0.9) !important;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+.categories-section .section-subtitle {
+    color: rgba(255, 255, 255, 0.85) !important;
+}
+
+.categories-section .title-line {
+    background: rgba(255, 255, 255, 0.8);
+}
+
+.categories-section .title-dot {
+    background: rgba(255, 255, 255, 0.9);
+}
+
 .feature-card {
     background: white;
     padding: 2rem 1.5rem;
@@ -1555,118 +1589,238 @@ body.hero-active .navbar-fixed {
     flex-direction: column;
 }
 
-.category-image-wrapper {
-    position: relative;
-    width: 100%;
-    height: 200px;
-    overflow: hidden;
-    border-radius: 20px 20px 0 0;
-}
-
-.category-image {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    transition: transform 0.4s ease;
-}
-
-.category-placeholder {
-    width: 100%;
-    height: 100%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    background: #f8f9fa;
-    color: #adb5bd;
-    font-size: 2rem;
-}
-
-.category-content {
-    padding: 1.5rem;
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-}
-
-.category-name {
-    font-size: 1.25rem;
-    font-weight: 600;
-    color: #2c3e50;
-    margin-bottom: 0.5rem;
-}
-
-.category-description {
-    color: #6c757d;
-    font-size: 0.9rem;
-    margin-bottom: 1rem;
-}
-
-.category-link {
-    display: inline-flex;
-    align-items: center;
-    gap: 0.5rem;
-    color: #2A83E9;
+/* ===== COMPACT CATEGORY CARDS ===== */
+.category-card-link {
     text-decoration: none;
-    font-weight: 500;
-    font-size: 0.95rem;
+    color: inherit;
+    display: block;
     transition: all 0.3s ease;
 }
 
-.category-link:hover {
-    color: #1565C0;
-    gap: 0.75rem;
+.category-card-compact {
+    background: rgba(255, 255, 255, 0.98);
+    border-radius: 15px;
+    overflow: hidden;
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+    transition: all 0.4s ease;
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    height: 90px;
+    display: flex;
+    align-items: center;
+    padding: 1rem;
+    position: relative;
+    backdrop-filter: blur(10px);
+    cursor: pointer;
 }
 
-.category-link i {
-    font-size: 0.8rem;
-    transition: transform 0.3s ease;
+.category-card-link:hover .category-card-compact {
+    transform: translateY(-5px);
+    box-shadow: 0 15px 40px rgba(0, 0, 0, 0.25);
+    border-color: rgba(255, 255, 255, 0.6);
+    background: rgba(255, 255, 255, 1);
 }
 
-.category-link:hover i {
-    transform: translateX(3px);
-}
-
-.category-overlay {
+.category-card-compact::before {
+    content: '';
     position: absolute;
     top: 0;
     left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.05));
+    pointer-events: none;
+    border-radius: 15px;
+}
+
+.category-card-compact::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    right: 1rem;
+    transform: translateY(-50%);
+    width: 0;
+    height: 0;
+    border-left: 6px solid #2A83E9;
+    border-top: 4px solid transparent;
+    border-bottom: 4px solid transparent;
+    opacity: 0;
+    transition: all 0.3s ease;
+    z-index: 4;
+}
+
+.category-card-link:hover .category-card-compact::after {
+    opacity: 1;
+    right: 0.75rem;
+}
+
+.category-content-left {
+    flex: 1;
+    padding-right: 0.75rem;
+    position: relative;
+    z-index: 2;
+}
+
+.category-content-left .category-name {
+    font-size: 1rem;
+    font-weight: 700;
+    color: #2c3e50;
+    margin-bottom: 0.25rem;
+    line-height: 1.2;
+    transition: color 0.3s ease;
+}
+
+.category-card-link:hover .category-name {
+    color: #2A83E9;
+}
+
+.category-content-left .category-description {
+    color: #6c757d;
+    font-size: 0.75rem;
+    margin-bottom: 0;
+    line-height: 1.3;
+    font-weight: 500;
+    transition: color 0.3s ease;
+}
+
+.category-card-link:hover .category-description {
+    color: #495057;
+}
+
+.category-image-right {
+    position: relative;
+    width: 50px;
+    height: 50px;
+    flex-shrink: 0;
+    z-index: 2;
+}
+
+.category-image-compact {
     width: 100%;
     height: 100%;
-    background: rgba(42, 131, 233, 0.9);
+    object-fit: cover;
+    border-radius: 10px;
+    border: 2px solid rgba(255, 255, 255, 0.8);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.category-placeholder-compact {
+    width: 100%;
+    height: 100%;
     display: flex;
     align-items: center;
     justify-content: center;
-    opacity: 0;
-    transition: all 0.3s ease;
-    border-radius: 20px 20px 0 0;
+    background: linear-gradient(135deg, #f8f9fa, #e9ecef);
+    color: #6c757d;
+    font-size: 1rem;
+    border-radius: 10px;
+    border: 2px solid rgba(255, 255, 255, 0.8);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
 }
 
-.category-overlay-content {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 0.5rem;
+.category-badge {
+    position: absolute;
+    top: -8px;
+    right: -8px;
+    background: linear-gradient(135deg, #dc3545, #c82333);
     color: white;
-    font-weight: 600;
-    transform: translateY(20px);
-    transition: all 0.3s ease;
+    font-size: 0.7rem;
+    font-weight: 700;
+    padding: 0.2rem 0.4rem;
+    border-radius: 10px;
+    min-width: 20px;
+    text-align: center;
+    box-shadow: 0 3px 10px rgba(220, 53, 69, 0.4);
+    border: 2px solid white;
+    line-height: 1;
+    z-index: 3;
 }
 
-.category-overlay-content i {
-    font-size: 2rem;
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .category-card-compact {
+        height: 80px;
+        padding: 0.75rem;
+    }
+    
+    .category-card-compact::after {
+        border-left: 5px solid #2A83E9;
+        border-top: 3px solid transparent;
+        border-bottom: 3px solid transparent;
+        right: 0.75rem;
+    }
+    
+    .category-card-link:hover .category-card-compact::after {
+        right: 0.5rem;
+    }
+    
+    .category-content-left .category-name {
+        font-size: 0.9rem;
+    }
+    
+    .category-content-left .category-description {
+        font-size: 0.7rem;
+    }
+    
+    .category-image-right {
+        width: 40px;
+        height: 40px;
+    }
+    
+    .category-badge {
+        top: -4px;
+        right: -4px;
+        font-size: 0.65rem;
+        padding: 0.1rem 0.25rem;
+        min-width: 16px;
+    }
+    
+    .categories-section .section-title {
+        font-size: 2rem;
+    }
+    
+    .categories-section .section-subtitle {
+        font-size: 1rem;
+    }
 }
 
-.category-card:hover .category-overlay {
-    opacity: 1;
-}
-
-.category-card:hover .category-overlay-content {
-    transform: translateY(0);
-}
-
-.category-card:hover .category-image {
-    transform: scale(1.1);
+@media (max-width: 576px) {
+    .category-card-compact {
+        height: 70px;
+        padding: 0.6rem;
+    }
+    
+    .category-card-compact::after {
+        border-left: 4px solid #2A83E9;
+        border-top: 2px solid transparent;
+        border-bottom: 2px solid transparent;
+        right: 0.5rem;
+    }
+    
+    .category-card-link:hover .category-card-compact::after {
+        right: 0.3rem;
+    }
+    
+    .category-content-left .category-name {
+        font-size: 0.85rem;
+        margin-bottom: 0.2rem;
+    }
+    
+    .category-content-left .category-description {
+        font-size: 0.65rem;
+    }
+    
+    .category-image-right {
+        width: 35px;
+        height: 35px;
+    }
+    
+    .categories-section .section-title {
+        font-size: 1.8rem;
+    }
+    
+    .categories-section .section-subtitle {
+        font-size: 0.9rem;
+    }
 }
 
 /* Blog Card Styles */
@@ -1874,7 +2028,7 @@ document.addEventListener('DOMContentLoaded', function() {
         const scrollTop = window.pageYOffset;
         const heroHeight = window.innerHeight;
         
-        if (scrollTop > heroHeight * 0.1) {
+        if (scrollTop > heroHeight * 0.8) {
             document.body.classList.remove('hero-active');
             // Force show navbar when scrolling down
             const navbar = document.querySelector('.navbar');
@@ -1884,9 +2038,18 @@ document.addEventListener('DOMContentLoaded', function() {
                 navbar.style.position = 'fixed';
                 navbar.style.top = '0';
                 navbar.style.zIndex = '9999';
+                navbar.style.width = '100vw';
+                navbar.style.left = '0';
+                navbar.style.right = '0';
             }
         } else {
             document.body.classList.add('hero-active');
+            // Hide navbar when at top
+            const navbar = document.querySelector('.navbar');
+            if (navbar && scrollTop < heroHeight * 0.1) {
+                navbar.style.opacity = '0';
+                navbar.style.transform = 'translateY(-100%)';
+            }
         }
     });
     

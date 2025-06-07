@@ -887,7 +887,7 @@
                             </div>
                         </div>
                     </div>
-                    <div class="col-md-4">
+                <div class="col-md-4">
                         <div class="highlight-item">
                             <div class="highlight-icon emergency">
                                 <i class="fas fa-tools"></i>

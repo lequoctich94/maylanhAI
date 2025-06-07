@@ -13,7 +13,7 @@ class HomeController extends Controller
     public function index()
     {
         $slides = Slide::active()->orderBy('order')->get();
-        $categories = Category::active()->take(6)->get();
+        $categories = Category::active()->withCount('products')->take(6)->get();
         $products = Product::active()
             ->with(['category', 'attributes.attribute'])
             ->latest()
