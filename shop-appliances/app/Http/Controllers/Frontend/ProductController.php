@@ -12,24 +12,56 @@ class ProductController extends Controller
     public function index()
     {
         $categories = Category::active()->withCount('products')->get();
+        $totalProducts = Product::active()->count();
+        
         $products = Product::active()
             ->with(['category', 'attributes.attribute'])
+            ->when(request('search'), function($query) {
+                $query->where('name', 'like', '%' . request('search') . '%')
+                      ->orWhere('description', 'like', '%' . request('search') . '%');
+            })
+            ->when(request('min_price'), function($query) {
+                $query->where(function($q) {
+                    $q->where('discount_price', '>=', request('min_price'))
+                      ->orWhere(function($subQuery) {
+                          $subQuery->whereNull('discount_price')
+                                   ->where('price', '>=', request('min_price'));
+                      });
+                });
+            })
+            ->when(request('max_price'), function($query) {
+                $query->where(function($q) {
+                    $q->where('discount_price', '<=', request('max_price'))
+                      ->orWhere(function($subQuery) {
+                          $subQuery->whereNull('discount_price')
+                                   ->where('price', '<=', request('max_price'));
+                      });
+                });
+            })
             ->when(request('sort'), function($query) {
                 switch(request('sort')) {
                     case 'price_asc':
-                        $query->orderBy('price', 'asc');
+                        $query->orderByRaw('COALESCE(discount_price, price) ASC');
                         break;
                     case 'price_desc':
-                        $query->orderBy('price', 'desc');
+                        $query->orderByRaw('COALESCE(discount_price, price) DESC');
                         break;
                     case 'newest':
                         $query->latest();
                         break;
+                    case 'name_asc':
+                        $query->orderBy('name', 'asc');
+                        break;
+                    case 'name_desc':
+                        $query->orderBy('name', 'desc');
+                        break;
+                    default:
+                        $query->latest();
                 }
             })
             ->paginate(12);
 
-        return view('frontend.products.index', compact('categories', 'products'));
+        return view('frontend.products.index', compact('categories', 'products', 'totalProducts'));
     }
 
     public function show(Product $product)
@@ -59,7 +91,8 @@ class ProductController extends Controller
             ->active()
             ->with(['attributes.attribute'])
             ->when(request('search'), function($query) {
-                $query->where('name', 'like', '%' . request('search') . '%');
+                $query->where('name', 'like', '%' . request('search') . '%')
+                      ->orWhere('description', 'like', '%' . request('search') . '%');
             })
             ->when(request('attributes'), function($query) {
                 foreach(request('attributes') as $attributeId => $value) {
