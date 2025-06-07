@@ -200,6 +200,391 @@
                 transform: translateY(-5px);
             }
         }
+
+        /* ===== FOOTER STYLES ===== */
+        .footer-main {
+            background: linear-gradient(135deg, #1a1a1a 0%, #2c3e50 100%);
+            color: #ffffff;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .footer-main::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="grain" width="100" height="100" patternUnits="userSpaceOnUse"><circle cx="50" cy="50" r="1" fill="rgba(255,255,255,0.02)"/></pattern></defs><rect width="100" height="100" fill="url(%23grain)"/></svg>');
+            opacity: 0.3;
+        }
+
+        .footer-content {
+            padding: 4rem 0 2rem;
+            position: relative;
+            z-index: 1;
+        }
+
+        .footer-section {
+            height: 100%;
+        }
+
+        .footer-logo {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .footer-logo-img {
+            height: 50px;
+            width: auto;
+        }
+
+        .footer-brand-name {
+            color: #ffd700;
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin: 0;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.3);
+        }
+
+        .footer-description {
+            color: #bdc3c7;
+            line-height: 1.6;
+            font-size: 0.95rem;
+            margin-bottom: 2rem;
+        }
+
+        .footer-title {
+            color: #ffffff;
+            font-size: 1.25rem;
+            font-weight: 600;
+            margin-bottom: 1.5rem;
+            position: relative;
+            padding-bottom: 0.5rem;
+        }
+
+        .footer-title::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 50px;
+            height: 3px;
+            background: linear-gradient(90deg, #2A83E9, #1565C0);
+            border-radius: 2px;
+        }
+
+        .footer-social-title {
+            color: #ffffff;
+            font-size: 1rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+        }
+
+        .social-links {
+            display: flex;
+            gap: 15px;
+        }
+
+        .social-link {
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            border: 2px solid transparent;
+        }
+
+        .social-link.facebook {
+            background: #3b5998;
+        }
+
+        .social-link.youtube {
+            background: #ff0000;
+        }
+
+        .social-link.zalo {
+            background: #0068ff;
+        }
+
+        .social-link.instagram {
+            background: linear-gradient(45deg, #f09433 0%,#e6683c 25%,#dc2743 50%,#cc2366 75%,#bc1888 100%);
+        }
+
+        .social-link:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.3);
+            border-color: rgba(255,255,255,0.3);
+        }
+
+        .contact-info {
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+
+        .contact-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 15px;
+        }
+
+        .contact-icon {
+            width: 45px;
+            height: 45px;
+            background: linear-gradient(135deg, #2A83E9, #1565C0);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 1.1rem;
+            flex-shrink: 0;
+            box-shadow: 0 4px 15px rgba(42, 131, 233, 0.3);
+        }
+
+        .contact-content h6 {
+            color: #ffffff;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            font-size: 0.95rem;
+        }
+
+        .contact-content p {
+            color: #bdc3c7;
+            margin: 0;
+            line-height: 1.5;
+            font-size: 0.9rem;
+        }
+
+        .contact-content a {
+            color: #bdc3c7;
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        .contact-content a:hover {
+            color: #2A83E9;
+        }
+
+        .footer-links {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .footer-links li {
+            margin-bottom: 0.75rem;
+        }
+
+        .footer-links a {
+            color: #bdc3c7;
+            text-decoration: none;
+            font-size: 0.9rem;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            position: relative;
+            padding-left: 15px;
+        }
+
+        .footer-links a::before {
+            content: '▸';
+            position: absolute;
+            left: 0;
+            color: #2A83E9;
+            transition: transform 0.3s ease;
+        }
+
+        .footer-links a:hover {
+            color: #ffffff;
+            transform: translateX(5px);
+        }
+
+        .footer-links a:hover::before {
+            transform: translateX(3px);
+        }
+
+        .footer-certify-title {
+            color: #ffffff;
+            font-size: 1rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+        }
+
+        .certify-images {
+            display: flex;
+            gap: 10px;
+        }
+
+        .certify-img {
+            height: 40px;
+            width: auto;
+            background: white;
+            padding: 5px;
+            border-radius: 8px;
+            opacity: 0.8;
+            transition: opacity 0.3s ease;
+        }
+
+        .certify-img:hover {
+            opacity: 1;
+        }
+
+        .footer-highlight {
+            background: rgba(42, 131, 233, 0.1);
+            border-top: 1px solid rgba(255,255,255,0.1);
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+            padding: 2rem 0;
+            position: relative;
+            z-index: 1;
+        }
+
+        .highlight-item {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            text-align: left;
+        }
+
+        .highlight-icon {
+            width: 55px;
+            height: 55px;
+            background: linear-gradient(135deg, #2A83E9, #1565C0);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 1.3rem;
+            flex-shrink: 0;
+            box-shadow: 0 4px 15px rgba(42, 131, 233, 0.4);
+        }
+
+        .highlight-icon.emergency {
+            background: linear-gradient(135deg, #ff4757, #ff3742);
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0% { box-shadow: 0 4px 15px rgba(255, 71, 87, 0.4); }
+            50% { box-shadow: 0 4px 25px rgba(255, 71, 87, 0.7); }
+            100% { box-shadow: 0 4px 15px rgba(255, 71, 87, 0.4); }
+        }
+
+        .highlight-content h6 {
+            color: #ffffff;
+            font-weight: 600;
+            margin-bottom: 0.25rem;
+            font-size: 1rem;
+        }
+
+        .highlight-content p {
+            color: #bdc3c7;
+            margin: 0;
+            font-size: 0.9rem;
+        }
+
+        .highlight-content a {
+            color: #2A83E9;
+            text-decoration: none;
+            font-weight: 600;
+            transition: color 0.3s ease;
+        }
+
+        .highlight-content a:hover {
+            color: #ffffff;
+        }
+
+        .footer-bottom {
+            background: rgba(0,0,0,0.3);
+            padding: 1.5rem 0;
+            border-top: 1px solid rgba(255,255,255,0.1);
+            position: relative;
+            z-index: 1;
+        }
+
+        .copyright {
+            color: #bdc3c7;
+            margin: 0;
+            font-size: 0.9rem;
+        }
+
+        .copyright strong {
+            color: #ffd700;
+        }
+
+        .footer-bottom-links {
+            display: flex;
+            gap: 20px;
+            justify-content: flex-end;
+        }
+
+        .footer-bottom-links a {
+            color: #bdc3c7;
+            text-decoration: none;
+            font-size: 0.9rem;
+            transition: color 0.3s ease;
+        }
+
+        .footer-bottom-links a:hover {
+            color: #2A83E9;
+        }
+
+        /* Mobile Responsive */
+        @media (max-width: 768px) {
+            .footer-content {
+                padding: 3rem 0 1.5rem;
+            }
+            
+            .footer-logo {
+                flex-direction: column;
+                text-align: center;
+                gap: 10px;
+            }
+            
+            .footer-brand-name {
+                font-size: 1.3rem;
+            }
+            
+            .social-links {
+                justify-content: center;
+            }
+            
+            .highlight-item {
+                flex-direction: column;
+                text-align: center;
+                gap: 10px;
+            }
+            
+            .footer-bottom-links {
+                justify-content: center;
+                margin-top: 1rem;
+            }
+            
+            .footer-bottom .row {
+                text-align: center;
+            }
+        }
+
+        @media (max-width: 576px) {
+            .footer-bottom-links {
+                flex-direction: column;
+                gap: 10px;
+            }
+            
+            .contact-item {
+                flex-direction: column;
+                text-align: center;
+                gap: 10px;
+            }
+        }
     </style>
 </head>
 <body>
@@ -347,29 +732,187 @@
     </main>
 
     <!-- Footer -->
-    <footer class="bg-dark text-white py-4">
-        <div class="container">
-            <div class="row">
-                <div class="col-md-4">
-                    <h5>About Us</h5>
-                    <p>Your trusted source for home appliances.</p>
+    <footer class="footer-main">
+        <!-- Main Footer Content -->
+        <div class="footer-content">
+            <div class="container">
+                <div class="row">
+                    <!-- Thông tin công ty -->
+                    <div class="col-lg-4 col-md-6 mb-4">
+                        <div class="footer-section">
+                            <div class="footer-logo mb-3">
+                                <img src="{{ asset('img/logo.png') }}" alt="{{ config('app.name') }} Logo" class="footer-logo-img">
+                                <h4 class="footer-brand-name">ĐIỆN LẠNH 100V</h4>
+                            </div>
+                            <p class="footer-description">
+                                Chuyên cung cấp các thiết bị điện lạnh chất lượng cao với dịch vụ lắp đặt, bảo hành uy tín. 
+                                Cam kết mang đến sự hài lòng tuyệt đối cho khách hàng.
+                            </p>
+                            <div class="footer-social">
+                                <h6 class="footer-social-title">Kết nối với chúng tôi</h6>
+                                <div class="social-links">
+                                    <a href="#" class="social-link facebook" title="Facebook">
+                                        <i class="fab fa-facebook-f"></i>
+                                    </a>
+                                    <a href="#" class="social-link youtube" title="YouTube">
+                                        <i class="fab fa-youtube"></i>
+                                    </a>
+                                    <a href="#" class="social-link zalo" title="Zalo">
+                                        <i class="fas fa-comments"></i>
+                                    </a>
+                                    <a href="#" class="social-link instagram" title="Instagram">
+                                        <i class="fab fa-instagram"></i>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Thông tin liên hệ -->
+                    <div class="col-lg-3 col-md-6 mb-4">
+                        <div class="footer-section">
+                            <h5 class="footer-title">Thông Tin Liên Hệ</h5>
+                            <div class="contact-info">
+                                <div class="contact-item">
+                                    <div class="contact-icon">
+                                        <i class="fas fa-map-marker-alt"></i>
+                                    </div>
+                                    <div class="contact-content">
+                                        <h6>Địa chỉ</h6>
+                                        <p>123 Đường ABC, Phường XYZ<br>Quận 1, TP. Hồ Chí Minh</p>
+                                    </div>
+                                </div>
+                                
+                                <div class="contact-item">
+                                    <div class="contact-icon">
+                                        <i class="fas fa-phone"></i>
+                                    </div>
+                                    <div class="contact-content">
+                                        <h6>Hotline</h6>
+                                        <p>
+                                            <a href="tel:0123456789">0123 456 789</a><br>
+                                            <a href="tel:0987654321">0987 654 321</a>
+                                        </p>
+                                    </div>
+                                </div>
+                                
+                                <div class="contact-item">
+                                    <div class="contact-icon">
+                                        <i class="fas fa-envelope"></i>
+                                    </div>
+                                    <div class="contact-content">
+                                        <h6>Email</h6>
+                                        <p>
+                                            <a href="mailto:info@dienlanh100v.com">info@dienlanh100v.com</a><br>
+                                            <a href="mailto:support@dienlanh100v.com">support@dienlanh100v.com</a>
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Dịch vụ & Sản phẩm -->
+                    <div class="col-lg-2 col-md-6 mb-4">
+                        <div class="footer-section">
+                            <h5 class="footer-title">Dịch Vụ</h5>
+                            <ul class="footer-links">
+                                <li><a href="{{ route('products.index') }}">Tất cả sản phẩm</a></li>
+                                <li><a href="#">Máy lạnh</a></li>
+                                <li><a href="#">Tủ lạnh</a></li>
+                                <li><a href="#">Máy giặt</a></li>
+                                <li><a href="#">Lắp đặt</a></li>
+                                <li><a href="#">Bảo hành</a></li>
+                                <li><a href="#">Sửa chữa</a></li>
+                                <li><a href="#">Vệ sinh máy lạnh</a></li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <!-- Hỗ trợ khách hàng -->
+                    <div class="col-lg-3 col-md-6 mb-4">
+                        <div class="footer-section">
+                            <h5 class="footer-title">Hỗ Trợ Khách Hàng</h5>
+                            <ul class="footer-links">
+                                <li><a href="#">Chính sách bảo hành</a></li>
+                                <li><a href="#">Chính sách đổi trả</a></li>
+                                <li><a href="#">Hướng dẫn mua hàng</a></li>
+                                <li><a href="#">Phương thức thanh toán</a></li>
+                                <li><a href="#">Chính sách vận chuyển</a></li>
+                                <li><a href="{{ route('blog.index') }}">Tin tức & Blog</a></li>
+                                <li><a href="#">FAQ</a></li>
+                            </ul>
+                            
+                            <div class="footer-certify mt-4">
+                                <h6 class="footer-certify-title">Chứng nhận</h6>
+                                <div class="certify-images">
+                                    <img src="{{ asset('img/certify-1.png') }}" alt="Chứng nhận" class="certify-img">
+                                    <img src="{{ asset('img/certify-2.png') }}" alt="Chứng nhận" class="certify-img">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
-                <div class="col-md-4">
-                    <h5>Quick Links</h5>
-                    <ul class="list-unstyled">
-                        <li><a href="{{ route('home') }}" class="text-white">Home</a></li>
-                        <li><a href="{{ route('products.index') }}" class="text-white">Products</a></li>
-                        <li><a href="#" class="text-white">About Us</a></li>
-                        <li><a href="#" class="text-white">Contact</a></li>
-                    </ul>
+            </div>
+        </div>
+
+        <!-- Working Hours & Emergency -->
+        <div class="footer-highlight">
+            <div class="container">
+                <div class="row align-items-center">
+                    <div class="col-md-4">
+                        <div class="highlight-item">
+                            <div class="highlight-icon">
+                                <i class="fas fa-clock"></i>
+                            </div>
+                            <div class="highlight-content">
+                                <h6>Giờ làm việc</h6>
+                                <p>T2-CN: 8:00 - 21:00</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="highlight-item">
+                            <div class="highlight-icon emergency">
+                                <i class="fas fa-tools"></i>
+                            </div>
+                            <div class="highlight-content">
+                                <h6>Sửa chữa khẩn cấp</h6>
+                                <p><a href="tel:0909123456">0909 123 456</a></p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="highlight-item">
+                            <div class="highlight-icon">
+                                <i class="fas fa-shipping-fast"></i>
+                            </div>
+                            <div class="highlight-content">
+                                <h6>Giao hàng</h6>
+                                <p>Miễn phí nội thành</p>
+                            </div>
+                        </div>
+                    </div>
                 </div>
-                <div class="col-md-4">
-                    <h5>Contact Info</h5>
-                    <ul class="list-unstyled">
-                        <li><i class="fas fa-phone"></i> +1234567890</li>
-                        <li><i class="fas fa-envelope"></i> info@example.com</li>
-                        <li><i class="fas fa-map-marker-alt"></i> 123 Street, City, Country</li>
-                    </ul>
+            </div>
+        </div>
+
+        <!-- Copyright -->
+        <div class="footer-bottom">
+            <div class="container">
+                <div class="row align-items-center">
+                    <div class="col-md-6">
+                        <p class="copyright">
+                            © {{ date('Y') }} <strong>ĐIỆN LẠNH 100V</strong>. Tất cả quyền được bảo lưu.
+                        </p>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="footer-bottom-links">
+                            <a href="#">Điều khoản sử dụng</a>
+                            <a href="#">Chính sách bảo mật</a>
+                            <a href="#">Sitemap</a>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>

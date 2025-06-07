@@ -36,6 +36,7 @@ class PostController extends Controller
             'excerpt' => 'nullable',
             'featured_image' => 'nullable|image|max:2048',
             'status' => 'required|in:draft,published',
+            'show_on_homepage' => 'nullable|boolean',
             'category_id' => 'required|exists:post_categories,id',
             'product_id' => 'nullable|exists:products,id',
             'published_at' => 'nullable|date',
@@ -45,6 +46,7 @@ class PostController extends Controller
 
         $validated['slug'] = Str::slug($request->title);
         $validated['user_id'] = auth()->id();
+        $validated['show_on_homepage'] = $request->has('show_on_homepage') ? true : false;
 
         if ($request->hasFile('featured_image')) {
             $validated['featured_image'] = $request->file('featured_image')
@@ -72,6 +74,7 @@ class PostController extends Controller
             'excerpt' => 'nullable',
             'featured_image' => 'nullable|image|max:2048',
             'status' => 'required|in:draft,published',
+            'show_on_homepage' => 'nullable|boolean',
             'category_id' => 'required|exists:post_categories,id',
             'product_id' => 'nullable|exists:products,id',
             'published_at' => 'nullable|date',
@@ -80,6 +83,7 @@ class PostController extends Controller
         ]);
 
         $validated['slug'] = Str::slug($request->title);
+        $validated['show_on_homepage'] = $request->has('show_on_homepage') ? true : false;
 
         if ($request->hasFile('featured_image')) {
             // Xóa ảnh cũ nếu có

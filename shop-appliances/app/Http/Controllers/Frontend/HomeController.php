@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Category;
 use App\Models\Product;
 use App\Models\Slide;
+use App\Models\Post;
 
 class HomeController extends Controller
 {
@@ -18,7 +19,14 @@ class HomeController extends Controller
             ->latest()
             ->take(8)
             ->get();
-        //dd($slides);
-        return view('frontend.home', compact('slides', 'categories', 'products'));
+        
+        // Lấy các bài viết hiển thị trên trang chủ
+        $posts = Post::showOnHomepage()
+            ->with(['category', 'author'])
+            ->latest()
+            ->take(6)
+            ->get();
+        
+        return view('frontend.home', compact('slides', 'categories', 'products', 'posts'));
     }
 } 

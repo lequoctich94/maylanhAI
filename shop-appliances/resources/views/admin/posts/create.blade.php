@@ -93,6 +93,20 @@
                         </div>
 
                         <div class="form-group">
+                            <div class="form-check">
+                                <input type="checkbox" class="form-check-input @error('show_on_homepage') is-invalid @enderror" 
+                                    id="show_on_homepage" name="show_on_homepage" value="1" {{ old('show_on_homepage') ? 'checked' : '' }}>
+                                <label class="form-check-label" for="show_on_homepage">
+                                    <strong>Hiển thị trên trang chủ</strong>
+                                    <small class="text-muted d-block">Bài viết sẽ xuất hiện trong section Blog trên trang chủ</small>
+                                </label>
+                                @error('show_on_homepage')
+                                    <span class="invalid-feedback">{{ $message }}</span>
+                                @enderror
+                            </div>
+                        </div>
+
+                        <div class="form-group">
                             <label for="published_at">Ngày xuất bản</label>
                             <input type="datetime-local" class="form-control @error('published_at') is-invalid @enderror" 
                                 id="published_at" name="published_at" value="{{ old('published_at') }}">

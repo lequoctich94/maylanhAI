@@ -3,9 +3,6 @@
 @section('title', 'Home')
 
 @section('content')
-</div> <!-- Close main container -->
-</main> <!-- Close main -->
-
 <!-- Full-Screen Modern Hero Slider -->
 <div id="heroCarousel" class="carousel slide hero-slider" data-bs-ride="carousel" data-bs-interval="5000">
     <!-- Custom Indicators -->
@@ -357,6 +354,79 @@
         </div>
     </section>
 
+    <!-- Blog Section -->
+    @if($posts->count() > 0)
+    <section class="blog-section py-5">
+        <div class="container">
+            <div class="section-header text-center mb-5">
+                <h2 class="section-title">
+                    <span class="title-highlight">Tin Tức</span> & Blog
+                </h2>
+                <p class="section-subtitle">Cập nhật thông tin mới nhất về sản phẩm và công nghệ</p>
+                <div class="title-decoration">
+                    <div class="title-line"></div>
+                    <div class="title-dot"></div>
+                    <div class="title-line"></div>
+                </div>
+            </div>
+            <div class="row g-4">
+                @foreach($posts as $post)
+                <div class="col-lg-4 col-md-6">
+                    <div class="blog-card modern-card">
+                        <div class="blog-image-wrapper">
+                            @if($post->featured_image)
+                                <img src="{{ asset('storage/' . $post->featured_image) }}" 
+                                     class="blog-image" 
+                                     alt="{{ $post->title }}">
+                            @else
+                                <div class="blog-placeholder">
+                                    <i class="fas fa-newspaper"></i>
+                                </div>
+                            @endif
+                            <div class="blog-overlay">
+                                <div class="blog-overlay-content">
+                                    <i class="fas fa-eye"></i>
+                                    <span>Đọc Bài Viết</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="blog-content">
+                            <div class="blog-meta">
+                                <span class="blog-category">{{ $post->category->name }}</span>
+                                <span class="blog-date">{{ $post->published_at->format('d/m/Y') }}</span>
+                            </div>
+                            <h5 class="blog-title">
+                                <a href="{{ route('blog.show', $post->slug) }}">
+                                    {{ $post->title }}
+                                </a>
+                            </h5>
+                            @if($post->excerpt)
+                                <p class="blog-excerpt">{{ Str::limit($post->excerpt, 120) }}</p>
+                            @endif
+                            <div class="blog-footer">
+                                <div class="blog-author">
+                                    <i class="fas fa-user"></i>
+                                    <span>{{ $post->author->name }}</span>
+                                </div>
+                                <a href="{{ route('blog.show', $post->slug) }}" class="blog-read-more">
+                                    Đọc thêm <i class="fas fa-arrow-right"></i>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                @endforeach
+            </div>
+            <div class="text-center mt-5">
+                <a href="{{ route('blog.index') }}" class="btn btn-view-all">
+                    <span>Xem Tất Cả Bài Viết</span>
+                    <i class="fas fa-arrow-right ms-2"></i>
+                </a>
+            </div>
+        </div>
+    </section>
+    @endif
+
         <!-- Newsletter Section -->
         <section class="newsletter-section py-5">
             <div class="container">
@@ -391,24 +461,23 @@
 <style>
 /* ===== FULL SCREEN HERO SLIDER ===== */
 .hero-slider {
-    position: fixed !important;
-    top: 0;
-    left: 0;
-    width: 100vw !important;
-    height: 100vh !important;
-    z-index: 1000;
-    margin: 0 !important;
+    position: relative;
+    width: 100vw;
+    height: 100vh;
+    z-index: 100;
+    margin: 0;
     overflow: hidden;
     background: #000;
+    margin-left: calc(-50vw + 50%);
 }
 
 .hero-inner {
-    height: 100vh !important;
+    height: 100vh;
 }
 
 .hero-slide {
     position: relative;
-    height: 100vh !important;
+    height: 100vh;
     overflow: hidden;
 }
 
@@ -669,12 +738,9 @@
 
 /* Layout adjustments for full screen */
 .main-content {
-    margin-top: 100vh; /* Push content below hero */
     position: relative;
-    z-index: 1001;
-    background: white;
-    width: 100%;
-    overflow-x: hidden;
+    z-index: 1;
+    background: #fff;
 }
 
 /* Performance */
@@ -1534,7 +1600,7 @@ body.hero-active .navbar-fixed {
     left: 0;
     width: 100%;
     height: 100%;
-    background: rgba(0, 0, 0, 0.2);
+    background: rgba(42, 131, 233, 0.9);
     display: flex;
     align-items: center;
     justify-content: center;
@@ -1544,27 +1610,213 @@ body.hero-active .navbar-fixed {
 }
 
 .category-overlay-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.5rem;
     color: white;
-    text-align: center;
+    font-weight: 600;
+    transform: translateY(20px);
+    transition: all 0.3s ease;
 }
 
 .category-overlay-content i {
-    font-size: 1.5rem;
-    margin-bottom: 0.5rem;
-}
-
-.category-overlay-content span {
-    display: block;
-    font-size: 0.9rem;
-    font-weight: 500;
+    font-size: 2rem;
 }
 
 .category-card:hover .category-overlay {
     opacity: 1;
 }
 
+.category-card:hover .category-overlay-content {
+    transform: translateY(0);
+}
+
 .category-card:hover .category-image {
     transform: scale(1.1);
+}
+
+/* Blog Card Styles */
+.blog-section {
+    background: #f8f9fa;
+}
+
+.blog-card {
+    position: relative;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    transition: all 0.3s ease;
+}
+
+.blog-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
+}
+
+.blog-image-wrapper {
+    position: relative;
+    width: 100%;
+    height: 220px;
+    overflow: hidden;
+    border-radius: 20px 20px 0 0;
+}
+
+.blog-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.4s ease;
+}
+
+.blog-placeholder {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: linear-gradient(135deg, #e9ecef, #f8f9fa);
+    color: #adb5bd;
+    font-size: 2.5rem;
+}
+
+.blog-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(42, 131, 233, 0.9);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    transition: all 0.3s ease;
+    border-radius: 20px 20px 0 0;
+}
+
+.blog-overlay-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.5rem;
+    color: white;
+    font-weight: 600;
+    transform: translateY(20px);
+    transition: all 0.3s ease;
+}
+
+.blog-overlay-content i {
+    font-size: 1.5rem;
+}
+
+.blog-card:hover .blog-overlay {
+    opacity: 1;
+}
+
+.blog-card:hover .blog-overlay-content {
+    transform: translateY(0);
+}
+
+.blog-card:hover .blog-image {
+    transform: scale(1.1);
+}
+
+.blog-content {
+    padding: 1.5rem;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+}
+
+.blog-meta {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1rem;
+}
+
+.blog-category {
+    background: linear-gradient(135deg, #2A83E9, #1565C0);
+    color: white;
+    padding: 0.25rem 0.75rem;
+    border-radius: 15px;
+    font-size: 0.8rem;
+    font-weight: 600;
+}
+
+.blog-date {
+    color: #6c757d;
+    font-size: 0.85rem;
+}
+
+.blog-title {
+    margin-bottom: 1rem;
+}
+
+.blog-title a {
+    color: #2c3e50;
+    text-decoration: none;
+    font-weight: 600;
+    font-size: 1.1rem;
+    line-height: 1.4;
+    transition: color 0.3s ease;
+}
+
+.blog-title a:hover {
+    color: #2A83E9;
+}
+
+.blog-excerpt {
+    color: #6c757d;
+    font-size: 0.9rem;
+    line-height: 1.6;
+    margin-bottom: 1.5rem;
+    flex: 1;
+}
+
+.blog-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: auto;
+}
+
+.blog-author {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    color: #6c757d;
+    font-size: 0.85rem;
+}
+
+.blog-author i {
+    color: #2A83E9;
+}
+
+.blog-read-more {
+    color: #2A83E9;
+    text-decoration: none;
+    font-weight: 600;
+    font-size: 0.9rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    transition: all 0.3s ease;
+}
+
+.blog-read-more:hover {
+    color: #1565C0;
+    gap: 0.75rem;
+}
+
+.blog-read-more i {
+    font-size: 0.8rem;
+    transition: transform 0.3s ease;
+}
+
+.blog-read-more:hover i {
+    transform: translateX(3px);
 }
 </style>
 @endpush
