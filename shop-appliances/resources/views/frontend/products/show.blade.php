@@ -19,10 +19,10 @@
         <!-- Product Image -->
         <div class="col-lg-6 mb-4">
             <div class="product-image-container">
-                <img src="{{ asset('storage/' . $product->image) }}" 
+            <img src="{{ asset('storage/' . $product->image) }}" 
                      class="img-fluid rounded product-main-image" 
-                     alt="{{ $product->name }}">
-                
+                 alt="{{ $product->name }}">
+            
                 @if($product->discount_price)
                     <div class="discount-badge-large">
                         <span class="discount-text">GIẢM GIÁ</span>
@@ -32,7 +32,7 @@
                     </div>
                 @endif
             </div>
-        </div>
+            </div>
 
         <!-- Product Basic Info -->
         <div class="col-lg-6">
@@ -46,11 +46,11 @@
                             @if($productAttribute->value && !($productAttribute->attribute->type === 'checkbox' && $productAttribute->value !== '1'))
                                 <span class="feature-highlight" 
                                       style="background-color: {{ $productAttribute->attribute->highlight_color ?? '#2A83E9' }};">
-                                    @if($productAttribute->attribute->type === 'checkbox')
+                                        @if($productAttribute->attribute->type === 'checkbox')
                                         <i class="fas fa-check me-2"></i>{{ $productAttribute->attribute->name }}
-                                    @else
+                                        @else
                                         <i class="fas fa-star me-2"></i>{{ $productAttribute->attribute->name }}: {{ $productAttribute->value }}
-                                    @endif
+                                        @endif
                                 </span>
                             @endif
                         @endforeach
@@ -106,14 +106,14 @@
                     <div class="info-item">
                         <i class="fas fa-headset text-primary"></i>
                         <span>Hỗ trợ 24/7</span>
-                    </div>
                 </div>
+            </div>
 
                 <!-- Add to Cart -->
-                @if($product->is_active)
+            @if($product->is_active)
                     <form action="{{ route('cart.add') }}" method="POST" class="add-to-cart-form">
-                        @csrf
-                        <input type="hidden" name="product_id" value="{{ $product->id }}">
+                    @csrf
+                    <input type="hidden" name="product_id" value="{{ $product->id }}">
                         <div class="d-flex gap-3 align-items-center mb-3">
                             <label class="form-label mb-0 fw-bold">Số lượng:</label>
                             <input type="number" 
@@ -130,10 +130,10 @@
                             <button type="button" class="btn btn-outline-primary btn-lg">
                                 <i class="fas fa-phone me-2"></i>Gọi Tư Vấn: 0123 456 789
                             </button>
-                        </div>
-                    </form>
-                @else
-                    <div class="alert alert-warning">
+                    </div>
+                </form>
+            @else
+                <div class="alert alert-warning">
                         <i class="fas fa-exclamation-triangle me-2"></i>
                         Sản phẩm này hiện đang hết hàng.
                     </div>
@@ -260,7 +260,7 @@
             </div>
         </div>
     </div>
-@endsection
+@endsection 
 
 @push('styles')
 <style>

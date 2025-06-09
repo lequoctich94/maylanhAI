@@ -23,6 +23,7 @@
                         <th>STT</th>
                         <th>Hình ảnh</th>
                         <th>Tiêu đề</th>
+                        <th>Loại</th>
                         <th>Thứ tự</th>
                         <th>Trạng thái</th>
                         <th>Thao tác</th>
@@ -38,10 +39,15 @@
                                 style="max-width: 100px;">
                         </td>
                         <td>{{ $slide->title }}</td>
+                        <td>
+                            <span class="badge {{ $slide->is_mobile ? 'bg-warning' : 'bg-info' }}">
+                                {{ $slide->is_mobile ? 'Mobile' : 'Desktop' }}
+                            </span>
+                        </td>
                         <td>{{ $slide->order }}</td>
                         <td>
-                            <span class="badge {{ $slide->status ? 'bg-success' : 'bg-danger' }}">
-                                {{ $slide->status ? 'Hiện' : 'Ẩn' }}
+                            <span class="badge {{ $slide->is_active ? 'bg-success' : 'bg-danger' }}">
+                                {{ $slide->is_active ? 'Hiện' : 'Ẩn' }}
                             </span>
                         </td>
                         <td>

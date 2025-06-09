@@ -141,7 +141,7 @@
         <section class="features-section py-5">
             <div class="container">
                 <div class="row g-4">
-                    <div class="col-md-3 col-sm-6">
+                    <div class="col-md-3 col-6">
                         <div class="feature-card text-center">
                             <div class="feature-icon">
                                 <i class="fas fa-shipping-fast"></i>
@@ -150,7 +150,7 @@
                             <p class="feature-text">Miễn phí giao hàng<br>trong nội thành</p>
                         </div>
                     </div>
-                    <div class="col-md-3 col-sm-6">
+                    <div class="col-md-3 col-6">
                         <div class="feature-card text-center">
                             <div class="feature-icon">
                                 <i class="fas fa-tools"></i>
@@ -159,7 +159,7 @@
                             <p class="feature-text">Đội ngũ kỹ thuật<br>chuyên nghiệp</p>
                         </div>
                     </div>
-                    <div class="col-md-3 col-sm-6">
+                    <div class="col-md-3 col-6">
                         <div class="feature-card text-center">
                             <div class="feature-icon">
                                 <i class="fas fa-shield-alt"></i>
@@ -168,7 +168,7 @@
                             <p class="feature-text">Cam kết bảo hành<br>từ nhà sản xuất</p>
                         </div>
                     </div>
-                    <div class="col-md-3 col-sm-6">
+                    <div class="col-md-3 col-6">
                         <div class="feature-card text-center">
                             <div class="feature-icon">
                                 <i class="fas fa-headset"></i>
@@ -197,7 +197,7 @@
                 </div>
                 <div class="row g-3">
                 @foreach($categories as $category)
-                        <div class="col-lg-2 col-md-4 col-sm-6">
+                        <div class="col-lg-2 col-md-4 col-sm-6 col-3">
                             <a href="{{ route('products.category', $category->slug) }}" class="category-card-link">
                                 <div class="category-card-compact">
                                     <div class="category-content-left">
@@ -850,6 +850,58 @@ body.hero-active .navbar-fixed {
 
 /* Mobile optimizations */
 @media (max-width: 768px) {
+    /* ===== MOBILE SLIDER OPTIMIZATIONS ===== */
+    .hero-slider {
+        height: 60vh; /* Giảm chiều cao trên mobile */
+        min-height: 400px; /* Đảm bảo chiều cao tối thiểu */
+        max-height: 500px; /* Giới hạn chiều cao tối đa */
+    }
+    
+    .hero-inner {
+        height: 60vh;
+        min-height: 400px;
+        max-height: 500px;
+    }
+    
+    .hero-slide {
+        height: 60vh;
+        min-height: 400px;
+        max-height: 500px;
+    }
+    
+    /* Tối ưu cho slider mobile với tỉ lệ 4:3 */
+    .hero-image-container {
+        position: absolute;
+        top: -5%;
+        left: -5%;
+        width: 110%;
+        height: 110%;
+        transition: transform 15s ease-in-out;
+    }
+    
+    .hero-image {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        object-position: center center; /* Đảm bảo hiển thị trung tâm */
+    }
+    
+    /* Tối ưu cho hình ảnh mobile tỉ lệ 4:3 */
+    .hero-image.mobile-4-3 {
+        object-fit: cover;
+        object-position: center center;
+        transform: none; /* Không scale để tránh bị cắt */
+    }
+    
+    .carousel-item.active .hero-image-container {
+        transform: scale(1.05) translate(1%, -1%); /* Giảm zoom effect */
+    }
+    
+    /* Aspect ratio cho mobile */
+    .hero-image-container::before {
+        aspect-ratio: 4/3; /* Tỉ lệ 4:3 cho mobile */
+    }
+    
     .hero-main-title {
         font-size: 2.8rem;
         letter-spacing: -1px;
@@ -866,6 +918,25 @@ body.hero-active .navbar-fixed {
 }
 
 @media (max-width: 576px) {
+    /* ===== EXTRA SMALL MOBILE OPTIMIZATION ===== */
+    .hero-slider {
+        height: 50vh;
+        min-height: 350px;
+        max-height: 450px;
+    }
+    
+    .hero-inner {
+        height: 50vh;
+        min-height: 350px;
+        max-height: 450px;
+    }
+    
+    .hero-slide {
+        height: 50vh;
+        min-height: 350px;
+        max-height: 450px;
+    }
+    
     .hero-main-title {
         font-size: 2.2rem;
     }
@@ -1291,6 +1362,52 @@ body.hero-active .navbar-fixed {
     font-size: 0.95rem;
     line-height: 1.5;
     margin-bottom: 0;
+}
+
+/* Mobile responsive for features */
+@media (max-width: 768px) {
+    .feature-card {
+        padding: 1.25rem 1rem;
+    }
+    
+    .feature-icon {
+        width: 50px;
+        height: 50px;
+        font-size: 1.3rem;
+        margin-bottom: 1rem;
+    }
+    
+    .feature-title {
+        font-size: 0.95rem;
+        margin-bottom: 0.4rem;
+    }
+    
+    .feature-text {
+        font-size: 0.8rem;
+        line-height: 1.4;
+    }
+}
+
+@media (max-width: 576px) {
+    .feature-card {
+        padding: 1rem 0.75rem;
+    }
+    
+    .feature-icon {
+        width: 45px;
+        height: 45px;
+        font-size: 1.1rem;
+        margin-bottom: 0.75rem;
+    }
+    
+    .feature-title {
+        font-size: 0.9rem;
+        margin-bottom: 0.3rem;
+    }
+    
+    .feature-text {
+        font-size: 0.75rem;
+    }
 }
 
 /* Section Headers */
@@ -1785,33 +1902,55 @@ body.hero-active .navbar-fixed {
 
 @media (max-width: 576px) {
     .category-card-compact {
-        height: 70px;
-        padding: 0.6rem;
+        height: 100px;
+        padding: 0.5rem;
+        flex-direction: column;
+        text-align: center;
+        justify-content: center;
+        align-items: center;
     }
     
     .category-card-compact::after {
-        border-left: 4px solid #2A83E9;
-        border-top: 2px solid transparent;
-        border-bottom: 2px solid transparent;
-        right: 0.5rem;
+        display: none; /* Ẩn arrow trên mobile */
     }
     
-    .category-card-link:hover .category-card-compact::after {
-        right: 0.3rem;
+    .category-content-left {
+        padding-right: 0;
+        order: 2;
+        flex-shrink: 0;
     }
     
     .category-content-left .category-name {
-        font-size: 0.85rem;
-        margin-bottom: 0.2rem;
+        font-size: 0.75rem;
+        margin-bottom: 0;
+        line-height: 1.2;
+        display: -webkit-box;
+        -webkit-line-clamp: 2;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+        text-overflow: ellipsis;
     }
     
     .category-content-left .category-description {
-        font-size: 0.65rem;
+        display: none; /* Ẩn chữ "sản phẩm" trên mobile */
     }
     
     .category-image-right {
         width: 35px;
         height: 35px;
+        align-self: center;
+        order: 1;
+        margin-bottom: 0.4rem;
+        flex-shrink: 0;
+    }
+    
+    .category-badge {
+        top: -4px;
+        right: -4px;
+        font-size: 0.55rem;
+        padding: 0.1rem 0.2rem;
+        min-width: 12px;
+        line-height: 1;
     }
     
     .categories-section .section-title {
@@ -2017,6 +2156,9 @@ document.addEventListener('DOMContentLoaded', function() {
     const heroIndicators = document.querySelectorAll('.hero-indicator');
     const scrollIndicator = document.querySelector('.scroll-indicator');
     
+    // Check if we're on mobile
+    const isMobile = window.innerWidth <= 768 || /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+    
     // Add hero-active class to body
     document.body.classList.add('hero-active');
     
@@ -2026,7 +2168,7 @@ document.addEventListener('DOMContentLoaded', function() {
         clearTimeout(scrollTimeout);
         
         const scrollTop = window.pageYOffset;
-        const heroHeight = window.innerHeight;
+        const heroHeight = isMobile ? window.innerHeight * 0.6 : window.innerHeight; // Adjust for mobile height
         
         if (scrollTop > heroHeight * 0.8) {
             document.body.classList.remove('hero-active');
@@ -2192,7 +2334,7 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         });
         
-        // Progressive image loading
+        // Progressive image loading with mobile optimization
         function loadHeroImages() {
             heroSlides.forEach(slide => {
                 const img = slide.querySelector('.hero-image');
@@ -2214,14 +2356,27 @@ document.addEventListener('DOMContentLoaded', function() {
                         // Detect image aspect ratio and apply appropriate class
                         const aspectRatio = this.width / this.height;
                         
-                        if (aspectRatio > 1.8) {
-                            img.classList.add('landscape');
-                        } else if (aspectRatio < 1.2) {
-                            img.classList.add('portrait');
-                        } else if (aspectRatio >= 0.9 && aspectRatio <= 1.1) {
-                            img.classList.add('square');
+                        if (isMobile) {
+                            // For mobile, prefer 4:3 aspect ratio
+                            if (aspectRatio >= 1.2 && aspectRatio <= 1.4) {
+                                img.classList.add('mobile-4-3');
+                            } else if (aspectRatio > 1.8) {
+                                img.classList.add('landscape');
+                            } else if (aspectRatio < 1.2) {
+                                img.classList.add('portrait');
+                            } else {
+                                img.classList.add('mobile-4-3');
+                            }
                         } else {
-                            img.classList.add('landscape');
+                            if (aspectRatio > 1.8) {
+                                img.classList.add('landscape');
+                            } else if (aspectRatio < 1.2) {
+                                img.classList.add('portrait');
+                            } else if (aspectRatio >= 0.9 && aspectRatio <= 1.1) {
+                                img.classList.add('square');
+                            } else {
+                                img.classList.add('landscape');
+                            }
                         }
                         
                         // Remove loading and show image
@@ -2229,7 +2384,7 @@ document.addEventListener('DOMContentLoaded', function() {
                         img.style.opacity = '1';
                         slide.classList.add('loaded');
                         
-                        console.log(`Image loaded: ${this.width}x${this.height}, ratio: ${aspectRatio.toFixed(2)}`);
+                        console.log(`Image loaded: ${this.width}x${this.height}, ratio: ${aspectRatio.toFixed(2)}, mobile: ${isMobile}`);
                     };
                     
                     tempImg.onerror = function() {

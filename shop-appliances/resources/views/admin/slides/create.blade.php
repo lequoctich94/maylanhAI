@@ -30,14 +30,31 @@
                 </div>
 
                 <div class="mb-3">
-                    <label for="description" class="form-label">Mô tả</label>
-                    <textarea class="form-control @error('description') is-invalid @enderror" 
-                              id="description" 
-                              name="description" 
-                              rows="3">{{ old('description') }}</textarea>
-                    @error('description')
+                    <label for="subtitle" class="form-label">Mô tả</label>
+                    <textarea class="form-control @error('subtitle') is-invalid @enderror" 
+                              id="subtitle" 
+                              name="subtitle" 
+                              rows="3">{{ old('subtitle') }}</textarea>
+                    @error('subtitle')
                         <div class="invalid-feedback">{{ $message }}</div>
                     @enderror
+                </div>
+
+                <div class="mb-3">
+                    <div class="form-check mb-3">
+                        <input class="form-check-input @error('is_mobile') is-invalid @enderror" 
+                               type="checkbox" 
+                               id="is_mobile" 
+                               name="is_mobile" 
+                               value="1" 
+                               {{ old('is_mobile') ? 'checked' : '' }}>
+                        <label class="form-check-label" for="is_mobile">
+                            <strong>Slider dành cho Mobile</strong>
+                        </label>
+                        @error('is_mobile')
+                            <div class="invalid-feedback">{{ $message }}</div>
+                        @enderror
+                    </div>
                 </div>
 
                 <div class="mb-3">
@@ -51,18 +68,26 @@
                     @error('image')
                         <div class="invalid-feedback">{{ $message }}</div>
                     @enderror
-                    <small class="text-muted">Kích thước đề xuất: 1920x1080px. Tối đa 2MB</small>
+                    <div class="mt-2">
+                        <div class="alert alert-info" id="desktop-size-info">
+                            <strong>Kích thước đề xuất cho Desktop:</strong> 1920x1080px (tỉ lệ 16:9). Tối đa 2MB
+                        </div>
+                        <div class="alert alert-warning" id="mobile-size-info" style="display: none;">
+                            <strong>Kích thước đề xuất cho Mobile:</strong> 390x293px (tỉ lệ 4:3) hoặc 390x220px (tỉ lệ 16:9). Tối đa 2MB
+                            <br><small class="text-muted">Lưu ý: Hình ảnh mobile nên có tỉ lệ 4:3 để hiển thị tốt trên màn hình điện thoại</small>
+                        </div>
+                    </div>
                 </div>
 
                 <div class="mb-3">
-                    <label for="url" class="form-label">Đường dẫn liên kết (không bắt buộc)</label>
+                    <label for="link" class="form-label">Đường dẫn liên kết (không bắt buộc)</label>
                     <input type="url" 
-                           class="form-control @error('url') is-invalid @enderror" 
-                           id="url" 
-                           name="url" 
-                           value="{{ old('url') }}"
+                           class="form-control @error('link') is-invalid @enderror" 
+                           id="link" 
+                           name="link" 
+                           value="{{ old('link') }}"
                            placeholder="https://example.com">
-                    @error('url')
+                    @error('link')
                         <div class="invalid-feedback">{{ $message }}</div>
                     @enderror
                     <small class="text-muted">Nhập URL đầy đủ nếu muốn liên kết slide đến một trang web</small>
@@ -112,4 +137,29 @@
         font-weight: 500;
     }
 </style>
+@endpush
+
+@push('scripts')
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const mobileCheckbox = document.getElementById('is_mobile');
+    const desktopSizeInfo = document.getElementById('desktop-size-info');
+    const mobileSizeInfo = document.getElementById('mobile-size-info');
+    
+    function toggleSizeInfo() {
+        if (mobileCheckbox.checked) {
+            desktopSizeInfo.style.display = 'none';
+            mobileSizeInfo.style.display = 'block';
+        } else {
+            desktopSizeInfo.style.display = 'block';
+            mobileSizeInfo.style.display = 'none';
+        }
+    }
+    
+    mobileCheckbox.addEventListener('change', toggleSizeInfo);
+    
+    // Initialize
+    toggleSizeInfo();
+});
+</script>
 @endpush 

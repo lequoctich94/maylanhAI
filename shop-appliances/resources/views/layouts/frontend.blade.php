@@ -34,6 +34,17 @@
             transition: all 0.3s ease;
         }
 
+        .navbar .container {
+            padding-right: 2rem;
+        }
+
+        /* Responsive navbar padding */
+        @media (max-width: 768px) {
+            .navbar .container {
+                padding-right: 1rem;
+            }
+        }
+
         .navbar-fixed {
             position: fixed;
             top: 0;
