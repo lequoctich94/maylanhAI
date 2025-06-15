@@ -588,6 +588,7 @@
                 flex-direction: column;
                 text-align: center;
                 gap: 10px;
+                margin-bottom: 1.5rem;
             }
             
             .footer-bottom-links {
@@ -598,18 +599,159 @@
             .footer-bottom .row {
                 text-align: center;
             }
+            
+            /* Contact info mobile optimization */
+            .contact-item {
+                margin-bottom: 1.5rem;
+            }
+            
+            .contact-icon {
+                width: 35px;
+                height: 35px;
+                font-size: 0.9rem;
+            }
+            
+            .contact-content h6 {
+                font-size: 0.85rem;
+                margin-bottom: 0.3rem;
+            }
+            
+            .contact-content p {
+                font-size: 0.8rem;
+                line-height: 1.4;
+            }
+            
+            /* Footer highlight mobile - 3 items responsive */
+            .footer-highlight {
+                padding: 1.5rem 0;
+            }
+            
+            .footer-highlight .row {
+                justify-content: center;
+            }
+            
+            .footer-highlight .col-md-4 {
+                flex: 0 0 auto;
+                width: 33.33333%;
+                margin-bottom: 0;
+            }
+            
+            .highlight-icon {
+                width: 45px;
+                height: 45px;
+                font-size: 1.1rem;
+                margin: 0 auto;
+            }
+            
+            .highlight-content h6 {
+                font-size: 0.85rem;
+                margin-bottom: 0.2rem;
+            }
+            
+            .highlight-content p {
+                font-size: 0.75rem;
+                line-height: 1.3;
+            }
         }
 
         @media (max-width: 576px) {
+            .footer-content {
+                padding: 2rem 0 1rem;
+            }
+            
+            .footer-description {
+                font-size: 0.9rem;
+                margin-bottom: 1.5rem;
+            }
+            
+            .footer-title {
+                font-size: 1.1rem;
+                margin-bottom: 1rem;
+            }
+            
+            .footer-links a {
+                font-size: 0.85rem;
+            }
+            
             .footer-bottom-links {
                 flex-direction: column;
                 gap: 10px;
             }
             
+            /* Contact items mobile optimization - keep horizontal layout */
             .contact-item {
-                flex-direction: column;
-                text-align: center;
-                gap: 10px;
+                display: flex;
+                align-items: flex-start;
+                gap: 12px;
+                margin-bottom: 1.2rem;
+                text-align: left;
+            }
+            
+            .contact-icon {
+                width: 30px;
+                height: 30px;
+                font-size: 0.8rem;
+                flex-shrink: 0;
+            }
+            
+            .contact-content h6 {
+                font-size: 0.8rem;
+                margin-bottom: 0.2rem;
+            }
+            
+            .contact-content p {
+                font-size: 0.75rem;
+                line-height: 1.3;
+                margin: 0;
+            }
+            
+            /* Footer highlight extra small mobile - stack vertically */
+            .footer-highlight .col-md-4 {
+                width: 100%;
+                margin-bottom: 1rem;
+            }
+            
+            .highlight-item {
+                flex-direction: row;
+                text-align: left;
+                gap: 15px;
+                justify-content: center;
+                align-items: center;
+                max-width: 280px;
+                margin: 0 auto 1rem;
+            }
+            
+            .highlight-icon {
+                width: 40px;
+                height: 40px;
+                font-size: 1rem;
+                margin: 0;
+                flex-shrink: 0;
+            }
+            
+            .highlight-content {
+                flex: 1;
+            }
+            
+            .highlight-content h6 {
+                font-size: 0.9rem;
+                margin-bottom: 0.1rem;
+            }
+            
+            .highlight-content p {
+                font-size: 0.8rem;
+                margin: 0;
+            }
+            
+            /* Compact social links */
+            .social-link {
+                width: 40px;
+                height: 40px;
+                font-size: 0.9rem;
+            }
+            
+            .footer-brand-name {
+                font-size: 1.2rem;
             }
         }
     </style>
