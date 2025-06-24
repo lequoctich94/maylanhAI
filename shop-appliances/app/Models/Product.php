@@ -53,4 +53,12 @@ class Product extends Model
     {
         return $this->hasMany(ProductAttribute::class);
     }
+    
+    /**
+     * Get the images for the product
+     */
+    public function images()
+    {
+        return $this->hasMany(ProductImage::class)->orderBy('sort_order', 'asc');
+    }
 } 

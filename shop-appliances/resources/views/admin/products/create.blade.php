@@ -88,10 +88,14 @@
                 </div>
 
                 <div class="mb-3">
-                    <label for="image" class="form-label">Image</label>
-                    <input type="file" class="form-control @error('image') is-invalid @enderror" 
-                           id="image" name="image" accept="image/*" required>
-                    @error('image')
+                    <label for="images" class="form-label">Hình ảnh sản phẩm (có thể chọn nhiều hình)</label>
+                    <input type="file" class="form-control @error('images') is-invalid @enderror" 
+                           id="images" name="images[]" accept="image/*" multiple required>
+                    <small class="text-muted">Có thể chọn nhiều ảnh cùng lúc. Ảnh đầu tiên sẽ là ảnh chính của sản phẩm.</small>
+                    @error('images')
+                        <div class="invalid-feedback">{{ $message }}</div>
+                    @enderror
+                    @error('images.*')
                         <div class="invalid-feedback">{{ $message }}</div>
                     @enderror
                 </div>

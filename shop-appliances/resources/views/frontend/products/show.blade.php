@@ -19,20 +19,41 @@
         <!-- Product Image -->
         <div class="col-lg-6 mb-4">
             <div class="product-image-container">
-            <img src="{{ asset('storage/' . $product->image) }}" 
-                     class="img-fluid rounded product-main-image" 
-                 alt="{{ $product->name }}">
-            
-                @if($product->discount_price)
-                    <div class="discount-badge-large">
-                        <span class="discount-text">GIẢM GIÁ</span>
-                        <span class="discount-percent">
-                            -{{ number_format((($product->price - $product->discount_price) / $product->price) * 100) }}%
-                        </span>
+                <!-- Ảnh chính -->
+                <div class="main-image-wrapper mb-3">
+                    <img src="{{ asset('storage/' . $product->image) }}" 
+                         class="img-fluid rounded product-main-image" 
+                         id="main-product-image"
+                         alt="{{ $product->name }}">
+                    
+                    @if($product->discount_price)
+                        <div class="discount-badge-large">
+                            <span class="discount-text">GIẢM GIÁ</span>
+                            <span class="discount-percent">
+                                -{{ number_format((($product->price - $product->discount_price) / $product->price) * 100) }}%
+                            </span>
+                        </div>
+                    @endif
+                </div>
+                
+                <!-- Thumbnails gallery -->
+                @if(count($product->images) > 0 || $product->image)
+                    <div class="product-thumbnails">
+                        <!-- Thumbnail ảnh chính -->
+                        <div class="thumbnail-item active" data-image="{{ asset('storage/' . $product->image) }}">
+                            <img src="{{ asset('storage/' . $product->image) }}" alt="{{ $product->name }}" class="img-thumbnail">
+                        </div>
+                        
+                        <!-- Thumbnails các ảnh phụ -->
+                        @foreach($product->images as $image)
+                            <div class="thumbnail-item" data-image="{{ asset('storage/' . $image->image_path) }}">
+                                <img src="{{ asset('storage/' . $image->image_path) }}" alt="{{ $product->name }}" class="img-thumbnail">
+                            </div>
+                        @endforeach
                     </div>
                 @endif
             </div>
-            </div>
+        </div>
 
         <!-- Product Basic Info -->
         <div class="col-lg-6">
@@ -264,6 +285,48 @@
 
 @push('styles')
 <style>
+/* Product Gallery Styles */
+.product-image-container {
+    background: white;
+    border-radius: 15px;
+    padding: 1.5rem;
+    box-shadow: 0 5px 20px rgba(0, 0, 0, 0.08);
+}
+
+.main-image-wrapper {
+    position: relative;
+    overflow: hidden;
+    border-radius: 10px;
+    margin-bottom: 15px;
+}
+
+.product-thumbnails {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-top: 15px;
+}
+
+.thumbnail-item {
+    width: 80px;
+    height: 80px;
+    border-radius: 8px;
+    overflow: hidden;
+    cursor: pointer;
+    border: 2px solid transparent;
+    transition: all 0.3s ease;
+}
+
+.thumbnail-item.active {
+    border-color: #2A83E9;
+}
+
+.thumbnail-item img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
 /* ===== PRODUCT DETAIL STYLES ===== */
 .product-image-container {
     position: relative;
@@ -568,6 +631,32 @@
 @push('scripts')
 <script>
 document.addEventListener('DOMContentLoaded', function() {
+    // Product Image Gallery
+    const thumbnails = document.querySelectorAll('.thumbnail-item');
+    const mainImage = document.getElementById('main-product-image');
+    
+    if (thumbnails.length > 0 && mainImage) {
+        thumbnails.forEach(thumb => {
+            thumb.addEventListener('click', function() {
+                // Remove active class from all thumbnails
+                thumbnails.forEach(t => t.classList.remove('active'));
+                
+                // Add active class to clicked thumbnail
+                this.classList.add('active');
+                
+                // Update main image
+                const imageUrl = this.dataset.image;
+                mainImage.src = imageUrl;
+                
+                // Optional zoom effect
+                mainImage.style.transform = 'scale(1.03)';
+                setTimeout(() => {
+                    mainImage.style.transform = 'scale(1)';
+                }, 300);
+            });
+        });
+    }
+    
     // Add to cart functionality
     const addToCartForm = document.querySelector('.add-to-cart-form');
     

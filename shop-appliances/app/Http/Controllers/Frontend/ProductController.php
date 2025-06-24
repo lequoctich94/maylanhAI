@@ -70,8 +70,8 @@ class ProductController extends Controller
             abort(404);
         }
 
-        // Load attributes với thông tin attribute
-        $product->load(['attributes.attribute']);
+        // Load attributes và images của sản phẩm
+        $product->load(['attributes.attribute', 'images']);
         
         return view('frontend.products.show', compact('product'));
     }

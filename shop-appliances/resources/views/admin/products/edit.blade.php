@@ -90,17 +90,52 @@
                 </div>
 
                 <div class="mb-3">
-                    <label for="image" class="form-label">Image</label>
-                    @if($product->image)
-                        <div class="mb-2">
-                            <img src="{{ asset('storage/' . $product->image) }}" 
-                                 alt="{{ $product->name }}" width="100">
+                    <label for="images" class="form-label">Hình ảnh sản phẩm</label>
+                    
+                    <!-- Hiển thị các ảnh hiện có -->
+                    <div class="row mb-3">
+                        <!-- Ảnh chính của sản phẩm -->
+                        @if($product->image)
+                        <div class="col-md-3 mb-2">
+                            <div class="card">
+                                <img src="{{ asset('storage/' . $product->image) }}" 
+                                     class="card-img-top" alt="{{ $product->name }}">
+                                <div class="card-body p-2 text-center">
+                                    <span class="badge bg-primary">Main Image</span>
+                                </div>
+                            </div>
                         </div>
-                    @endif
-                    <input type="file" class="form-control @error('image') is-invalid @enderror" 
-                           id="image" name="image" accept="image/*">
-                    <small class="text-muted">Leave empty to keep current image</small>
-                    @error('image')
+                        @endif
+                        
+                        <!-- Các ảnh khác từ bảng product_images -->
+                        @foreach($product->images as $image)
+                        <div class="col-md-3 mb-2">
+                            <div class="card">
+                                <img src="{{ asset('storage/' . $image->image_path) }}" 
+                                     class="card-img-top" alt="{{ $product->name }}">
+                                <div class="card-body p-2 text-center">
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" 
+                                               name="remove_images[]" value="{{ $image->id }}" 
+                                               id="remove_image_{{ $image->id }}">
+                                        <label class="form-check-label" for="remove_image_{{ $image->id }}">
+                                            Xóa ảnh này
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        @endforeach
+                    </div>
+                    
+                    <!-- Upload ảnh mới -->
+                    <input type="file" class="form-control @error('images') is-invalid @enderror" 
+                           id="images" name="images[]" accept="image/*" multiple>
+                    <small class="text-muted">Để trống nếu không muốn thêm ảnh mới. Có thể chọn nhiều ảnh cùng lúc.</small>
+                    @error('images')
+                        <div class="invalid-feedback">{{ $message }}</div>
+                    @enderror
+                    @error('images.*')
                         <div class="invalid-feedback">{{ $message }}</div>
                     @enderror
                 </div>
