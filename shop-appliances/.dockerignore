@@ -1,0 +1,60 @@
+# Git
+.git
+.gitignore
+.gitattributes
+
+# Docker
+Dockerfile
+.dockerignore
+docker-compose.yml
+docker/
+
+# Documentation
+README.md
+README-Docker.md
+*.md
+
+# IDE
+.vscode/
+.idea/
+.fleet/
+.nova/
+.zed/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Laravel
+/vendor/
+/node_modules/
+/public/hot
+/public/storage
+/storage/*.key
+.env
+.env.backup
+.env.production
+.env.testing
+.phpunit.result.cache
+Homestead.json
+Homestead.yaml
+npm-debug.log
+yarn-error.log
+auth.json
+/.phpactor.json
+/.styleci.yml
+
+# Logs
+*.log
+
+# Testing
+/tests/
+phpunit.xml
+
+# Development files
+note.txt
+huongdan.txt
+doc.txt
+*.png
+*.jpg
+*.jpeg 
