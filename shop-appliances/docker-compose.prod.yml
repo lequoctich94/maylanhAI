@@ -27,6 +27,7 @@ services:
     container_name: shop_app
     restart: unless-stopped
     working_dir: /var/www
+    entrypoint: ["php-fpm"]
     volumes:
       - ./:/var/www
       - app_storage:/var/www/storage
