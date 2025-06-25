@@ -104,18 +104,20 @@ if [ "$ENVIRONMENT" = "production" ]; then
 fi
 
 # Backup existing database if containers are running
-if docker ps -q --filter "name=${APP_NAME}_mysql" | grep -q .; then
+if docker ps -q --filter "name=shop_mysql" | grep -q .; then
     log_info "📦 Creating database backup..."
     BACKUP_FILE="$BACKUP_DIR/backup_before_deploy_$(date +%Y%m%d_%H%M%S).sql"
-    docker exec ${APP_NAME}_mysql mysqldump -u ${DB_USERNAME} -p${DB_PASSWORD} ${DB_DATABASE} > $BACKUP_FILE
+    docker exec shop_mysql mysqldump -u ${DB_USERNAME:-shop_user} -p${DB_PASSWORD} ${DB_DATABASE:-shop_db} > $BACKUP_FILE
     log_success "Database backup created: $BACKUP_FILE"
 fi
 
 # Stop existing containers
 log_info "🛑 Stopping existing containers..."
 if [ "$ENVIRONMENT" = "production" ]; then
+    log_info "Using docker-compose.prod.yml for production deployment"
     docker-compose -f docker-compose.prod.yml down
 else
+    log_info "Using docker-compose.yml for staging deployment"
     docker-compose down
 fi
 
@@ -126,16 +128,20 @@ docker-compose pull
 # Build application
 log_info "🔨 Building application..."
 if [ "$ENVIRONMENT" = "production" ]; then
+    log_info "Building production containers with optimizations..."
     docker-compose -f docker-compose.prod.yml build --no-cache
 else
+    log_info "Building development containers..."
     docker-compose build --no-cache
 fi
 
 # Start containers
 log_info "🚀 Starting containers..."
 if [ "$ENVIRONMENT" = "production" ]; then
+    log_info "Starting production environment..."
     docker-compose -f docker-compose.prod.yml up -d
 else
+    log_info "Starting staging environment..."
     docker-compose up -d
 fi
 
@@ -144,7 +150,7 @@ log_info "⏳ Waiting for services to be ready..."
 sleep 30
 
 # Check if containers are running
-if ! docker ps -q --filter "name=${APP_NAME}_app" | grep -q .; then
+if ! docker ps -q --filter "name=shop_app" | grep -q .; then
     log_error "Application container failed to start"
     docker-compose logs app
     exit 1
@@ -156,27 +162,27 @@ log_info "⚙️ Running Laravel setup commands..."
 # Generate app key if not set
 if ! grep -q "APP_KEY=base64:" .env; then
     log_info "Generating application key..."
-    docker exec ${APP_NAME}_app php artisan key:generate
+    docker exec shop_app php artisan key:generate
 fi
 
 # Run migrations
 log_info "Running database migrations..."
-docker exec ${APP_NAME}_app php artisan migrate --force
+docker exec shop_app php artisan migrate --force
 
 # Clear and cache configuration
 log_info "Caching configuration..."
-docker exec ${APP_NAME}_app php artisan config:cache
-docker exec ${APP_NAME}_app php artisan route:cache
-docker exec ${APP_NAME}_app php artisan view:cache
+docker exec shop_app php artisan config:cache
+docker exec shop_app php artisan route:cache
+docker exec shop_app php artisan view:cache
 
 # Create storage link
 log_info "Creating storage link..."
-docker exec ${APP_NAME}_app php artisan storage:link
+docker exec shop_app php artisan storage:link
 
 # Set proper permissions
 log_info "Setting storage permissions..."
-docker exec ${APP_NAME}_app chown -R www:www /var/www/storage /var/www/bootstrap/cache
-docker exec ${APP_NAME}_app chmod -R 775 /var/www/storage /var/www/bootstrap/cache
+docker exec shop_app chown -R www:www /var/www/storage /var/www/bootstrap/cache
+docker exec shop_app chmod -R 775 /var/www/storage /var/www/bootstrap/cache
 
 # Health check
 log_info "🏥 Performing health check..."
@@ -211,7 +217,7 @@ fi
 echo ""
 log_info "📝 Useful commands:"
 echo "   View logs: docker-compose logs -f"
-echo "   Enter app container: docker exec -it ${APP_NAME}_app bash"
+echo "   Enter app container: docker exec -it shop_app bash"
 echo "   Stop services: docker-compose down"
 echo "   Restart services: docker-compose restart"
 
