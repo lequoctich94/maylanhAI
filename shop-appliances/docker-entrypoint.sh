@@ -2,5 +2,5 @@
 
 echo "🚀 Starting PHP-FPM..."
 
-# Start PHP-FPM
-exec php-fpm 
+# Start PHP-FPM in foreground
+exec php-fpm -F 
