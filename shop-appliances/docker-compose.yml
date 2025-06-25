@@ -40,7 +40,7 @@ services:
 
   # MySQL Database
   mysql:
-    image: mysql:8.0
+    image: mysql:5.7
     container_name: shop_mysql
     restart: unless-stopped
     environment:
@@ -57,7 +57,7 @@ services:
 
   # Redis (Optional - for caching and sessions)
   redis:
-    image: redis:alpine
+    image: redis:6-alpine
     container_name: shop_redis
     restart: unless-stopped
     ports:
