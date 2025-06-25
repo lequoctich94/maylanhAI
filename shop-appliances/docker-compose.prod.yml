@@ -28,6 +28,7 @@ services:
     restart: unless-stopped
     working_dir: /var/www
     volumes:
+      - ./:/var/www
       - app_storage:/var/www/storage
       - app_public:/var/www/public
     environment:

@@ -43,8 +43,8 @@ php artisan route:cache
 php artisan view:cache
 
 # Run database migrations
-echo "🗄️ Running database migrations..."
-php artisan migrate --force
+echo "🗄️ Skipping database migrations..."
+# php artisan migrate --force
 
 # Set proper permissions
 echo "🔐 Setting permissions..."
