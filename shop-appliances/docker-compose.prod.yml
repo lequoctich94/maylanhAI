@@ -38,12 +38,12 @@ services:
       - DB_PASSWORD=${DB_PASSWORD}
       - APP_ENV=production
       - APP_DEBUG=false
-      - CACHE_STORE=redis
-      - SESSION_DRIVER=redis
-      - REDIS_HOST=redis
+      # - CACHE_STORE=redis
+      # - SESSION_DRIVER=redis
+      # - REDIS_HOST=redis
     depends_on:
       - mysql
-      - redis
+      # - redis
     networks:
       - shop_network
 
@@ -67,17 +67,17 @@ services:
       - shop_network
 
   # Redis
-  redis:
-    image: redis:6-alpine
-    container_name: shop_redis
-    restart: unless-stopped
-    command: redis-server
-    volumes:
-      - redis_data:/data
-    ports:
-      - "127.0.0.1:6379:6379"  # Chỉ bind localhost
-    networks:
-      - shop_network
+  # redis:
+  #   image: redis:6-alpine
+  #   container_name: shop_redis
+  #   restart: unless-stopped
+  #   command: redis-server
+  #   volumes:
+  #     - redis_data:/data
+  #   ports:
+  #     - "127.0.0.1:6379:6379"  # Chỉ bind localhost
+  #   networks:
+  #     - shop_network
 
   # Backup service (optional)
   backup:
