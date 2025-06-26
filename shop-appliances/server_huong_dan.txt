@@ -1,0 +1,328 @@
+📋 HƯỚNG DẪN DEPLOY PROJECT MỚI LÊN SERVER
+
+🔧 YÊU CẦU BAN ĐẦU
+- Server đã có: Nginx + PHP 8.3 + MySQL
+- Domain đã trỏ về IP: 103.104.118.142
+- Source code đã sẵn sàng
+
+===============================================
+
+📁 BƯỚC 1: TẠO THỦ MỤC PROJECT
+
+# Tạo thư mục cho project mới
+sudo mkdir -p /var/www/sites/TEN_PROJECT
+
+# Phân quyền
+sudo chown -R www-data:www-data /var/www/sites/TEN_PROJECT
+sudo chmod -R 755 /var/www/sites/TEN_PROJECT
+
+===============================================
+
+📤 BƯỚC 2: UPLOAD SOURCE CODE
+
+## Cách 1: Dùng Git
+cd /var/www/sites/TEN_PROJECT
+sudo git clone https://github.com/USERNAME/REPO.git .
+sudo chown -R www-data:www-data /var/www/sites/TEN_PROJECT
+
+## Cách 2: Upload qua FTP/SCP
+# Upload source vào /var/www/sites/TEN_PROJECT
+# Sau đó phân quyền:
+sudo chown -R www-data:www-data /var/www/sites/TEN_PROJECT
+sudo chmod -R 755 /var/www/sites/TEN_PROJECT
+
+===============================================
+
+🌐 BƯỚC 3: CẤU HÌNH NGINX
+
+## Tạo file cấu hình
+sudo nano /etc/nginx/sites-available/TEN_PROJECT
+
+## Nội dung file (cho Laravel):
+server {
+    listen 80;
+    server_name DOMAIN.COM www.DOMAIN.COM;
+    root /var/www/sites/TEN_PROJECT/public;
+    index index.php index.html index.htm;
+
+    # Handle Laravel routes
+    location / {
+        try_files $uri $uri/ /index.php?$query_string;
+    }
+
+    # Handle PHP files
+    location ~ \.php$ {
+        include snippets/fastcgi-php.conf;
+        fastcgi_pass unix:/var/run/php/php8.3-fpm.sock;
+        fastcgi_param SCRIPT_FILENAME $document_root$fastcgi_script_name;
+        include fastcgi_params;
+    }
+
+    # Static files caching
+    location ~* \.(css|js|png|jpg|jpeg|gif|ico|svg|woff|woff2|ttf|eot)$ {
+        expires 1y;
+        add_header Cache-Control "public, immutable";
+    }
+
+    # Security
+    location ~ /\. {
+        deny all;
+    }
+    
+    location ~* \.(env|log|htaccess)$ {
+        deny all;
+    }
+}
+
+## Nội dung file (cho PHP thuần):
+server {
+    listen 80;
+    server_name DOMAIN.COM www.DOMAIN.COM;
+    root /var/www/sites/TEN_PROJECT;
+    index index.php index.html index.htm;
+
+    location / {
+        try_files $uri $uri/ /index.php?$query_string;
+    }
+
+    location ~ \.php$ {
+        include snippets/fastcgi-php.conf;
+        fastcgi_pass unix:/var/run/php/php8.3-fpm.sock;
+        fastcgi_param SCRIPT_FILENAME $document_root$fastcgi_script_name;
+        include fastcgi_params;
+    }
+
+    location ~ /\. {
+        deny all;
+    }
+}
+
+## Enable site
+# Enable site
+sudo ln -s /etc/nginx/sites-available/TEN_PROJECT /etc/nginx/sites-enabled/
+
+# Test cấu hình
+sudo nginx -t
+
+# Restart nginx
+sudo systemctl restart nginx
+
+===============================================
+
+🗄️ BƯỚC 4: SETUP DATABASE (nếu cần)
+
+# Vào MySQL
+sudo mysql
+
+# Tạo database
+CREATE DATABASE ten_database;
+
+# Cấp quyền cho user shop_user (đã có sẵn)
+GRANT ALL PRIVILEGES ON ten_database.* TO 'shop_user'@'%';
+GRANT ALL PRIVILEGES ON ten_database.* TO 'shop_user'@'localhost';
+FLUSH PRIVILEGES;
+EXIT;
+
+THÔNG TIN KẾT NỐI DATABASE:
+- Host: 127.0.0.1
+- User: shop_user
+- Password: password123
+- Database: ten_database
+
+===============================================
+
+⚙️ BƯỚC 5: CẤU HÌNH LARAVEL (nếu là Laravel)
+
+## Cài đặt dependencies
+cd /var/www/sites/TEN_PROJECT
+sudo -u www-data composer install --optimize-autoloader --no-dev
+
+## Cấu hình .env
+# Copy .env
+sudo -u www-data cp .env.example .env
+
+# Sửa .env
+sudo nano .env
+
+NỘI DUNG .ENV CẦN SỬA:
+APP_NAME="Tên Project"
+APP_ENV=production
+APP_DEBUG=false
+APP_URL=http://DOMAIN.COM
+
+DB_CONNECTION=mysql
+DB_HOST=127.0.0.1
+DB_PORT=3306
+DB_DATABASE=ten_database
+DB_USERNAME=shop_user
+DB_PASSWORD=password123
+
+## Generate key và setup
+# Generate key
+sudo -u www-data php artisan key:generate
+
+# Storage link
+sudo -u www-data php artisan storage:link
+
+# Cache config
+sudo -u www-data php artisan config:cache
+sudo -u www-data php artisan route:cache
+sudo -u www-data php artisan view:cache
+
+# Migration (nếu cần)
+sudo -u www-data php artisan migrate
+
+# Phân quyền storage
+sudo chmod -R 775 /var/www/sites/TEN_PROJECT/storage
+sudo chmod -R 775 /var/www/sites/TEN_PROJECT/bootstrap/cache
+
+===============================================
+
+🔒 BƯỚC 6: CÀI SSL (HTTPS)
+
+# Cài Certbot (nếu chưa có)
+sudo apt install certbot python3-certbot-nginx
+
+# Issue SSL certificate
+sudo certbot --nginx -d DOMAIN.COM -d www.DOMAIN.COM
+
+# Auto-renew (đã tự động setup)
+sudo certbot renew --dry-run
+
+===============================================
+
+✅ BƯỚC 7: KIỂM TRA HOẠT ĐỘNG
+
+# Test truy cập
+curl -I http://DOMAIN.COM
+curl -I https://DOMAIN.COM
+
+# Kiểm tra SSL
+curl -I https://DOMAIN.COM
+
+# Monitor log
+sudo tail -f /var/log/nginx/access.log
+sudo tail -f /var/log/nginx/error.log
+
+===============================================
+
+🔄 BƯỚC 8: SCRIPT DEPLOY TỰ ĐỘNG (Optional)
+
+## Tạo file deploy script:
+sudo nano /var/www/sites/TEN_PROJECT/deploy.sh
+
+NỘI DUNG FILE DEPLOY.SH:
+#!/bin/bash
+
+cd /var/www/sites/TEN_PROJECT
+
+echo "🚀 Starting deployment..."
+
+# Pull latest code
+sudo -u www-data git pull origin main
+
+# Install dependencies
+sudo -u www-data composer install --optimize-autoloader --no-dev
+
+# Laravel optimizations
+sudo -u www-data php artisan config:cache
+sudo -u www-data php artisan route:cache  
+sudo -u www-data php artisan view:cache
+
+# Run migrations
+sudo -u www-data php artisan migrate --force
+
+# Fix permissions
+sudo chown -R www-data:www-data /var/www/sites/TEN_PROJECT
+sudo chmod -R 775 /var/www/sites/TEN_PROJECT/storage
+sudo chmod -R 775 /var/www/sites/TEN_PROJECT/bootstrap/cache
+
+echo "✅ Deployment completed!"
+
+## Phân quyền và chạy script
+# Phân quyền script
+sudo chmod +x /var/www/sites/TEN_PROJECT/deploy.sh
+
+# Chạy deploy
+sudo /var/www/sites/TEN_PROJECT/deploy.sh
+
+===============================================
+
+📋 CHECKLIST HOÀN THÀNH
+
+- [ ] Tạo thư mục project
+- [ ] Upload source code
+- [ ] Cấu hình nginx
+- [ ] Tạo database
+- [ ] Cấu hình .env (Laravel)
+- [ ] Chạy migration (Laravel)
+- [ ] Cài SSL certificate
+- [ ] Test website hoạt động
+- [ ] Setup deploy script
+
+===============================================
+
+🔧 TROUBLESHOOTING
+
+## Lỗi 404 Not Found
+# Kiểm tra nginx config
+sudo nginx -T | grep -A 10 "server_name DOMAIN.COM"
+
+# Kiểm tra root path
+ls -la /var/www/sites/TEN_PROJECT/
+
+## Lỗi 500 Internal Server Error
+# Xem log lỗi
+sudo tail -f /var/log/nginx/error.log
+
+# Kiểm tra quyền file
+sudo chown -R www-data:www-data /var/www/sites/TEN_PROJECT
+sudo chmod -R 775 /var/www/sites/TEN_PROJECT/storage
+
+## Lỗi Database Connection
+# Test kết nối database
+mysql -h 127.0.0.1 -u shop_user -p ten_database
+
+# Kiểm tra .env file
+cat /var/www/sites/TEN_PROJECT/.env | grep DB_
+
+===============================================
+
+🎉 HOÀN THÀNH! Website đã sẵn sàng truy cập tại https://DOMAIN.COM
+
+===============================================
+
+📝 THÔNG TIN SERVER HIỆN TẠI:
+
+IP Server: 103.104.118.142
+Nginx: 1.24.0
+PHP: 8.3.6
+MySQL: Đã cài đặt
+
+User Database có sẵn:
+- User: shop_user
+- Password: password123
+- Quyền: Admin toàn bộ MySQL
+
+Firewall đã mở:
+- Port 22 (SSH)
+- Port 80 (HTTP)
+- Port 443 (HTTPS)
+- Port 3306 (MySQL)
+- Port 8080 (Test)
+
+Thư mục chính: /var/www/sites/
+Project hiện tại: 
+- Shop Appliances: http://103.104.118.142/shop-appliances/
+- Tin Tức: http://103.104.118.142:8080/
+
+===============================================
+
+📞 LIÊN HỆ HỖ TRỢ:
+Khi gặp vấn đề, kiểm tra:
+1. Log nginx: /var/log/nginx/error.log
+2. Log PHP: /var/log/php8.3-fpm.log
+3. Quyền file: ls -la /var/www/sites/TEN_PROJECT
+4. Database connection: mysql -h 127.0.0.1 -u shop_user -p
+
+=============================================== 
